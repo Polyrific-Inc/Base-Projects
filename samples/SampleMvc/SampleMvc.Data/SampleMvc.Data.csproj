@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\Polyrific.Project.Data\Polyrific.Project.Data.csproj" />
+    <ProjectReference Include="..\..\..\libs\Polyrific.Project.Data\Polyrific.Project.Data.csproj" />
     <ProjectReference Include="..\SampleMvc.Core\SampleMvc.Core.csproj" />
   </ItemGroup>
 

@@ -7,15 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleMvc", "SampleMvc\Samp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{C18D3EFF-52E5-4535-9396-141DADA96B71}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polyrific.Project.Mvc", "..\libs\Polyrific.Project.Mvc\Polyrific.Project.Mvc.csproj", "{22C2549E-F5E6-4665-81F7-F2B37000ED24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polyrific.Project.Mvc", "..\..\libs\Polyrific.Project.Mvc\Polyrific.Project.Mvc.csproj", "{22C2549E-F5E6-4665-81F7-F2B37000ED24}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polyrific.Project.Core", "..\libs\Polyrific.Project.Core\Polyrific.Project.Core.csproj", "{5ED51783-1229-47C8-A0C5-E3E8F35091AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polyrific.Project.Core", "..\..\libs\Polyrific.Project.Core\Polyrific.Project.Core.csproj", "{5ED51783-1229-47C8-A0C5-E3E8F35091AC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleMvc.Core", "SampleMvc.Core\SampleMvc.Core.csproj", "{8FF2D33B-9B6D-4ACA-BA35-5DB77D1B8D98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleMvc.Data", "SampleMvc.Data\SampleMvc.Data.csproj", "{164C5053-DE28-46C3-AF5E-B7CF908C1B06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polyrific.Project.Data", "..\libs\Polyrific.Project.Data\Polyrific.Project.Data.csproj", "{9583BC8C-89B8-4043-A1A9-F3BAD9F79DFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polyrific.Project.Data", "..\..\libs\Polyrific.Project.Data\Polyrific.Project.Data.csproj", "{9583BC8C-89B8-4043-A1A9-F3BAD9F79DFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleMvc.Infrastructure", "SampleMvc.Infrastructure\SampleMvc.Infrastructure.csproj", "{78CCA78F-44C3-485F-9F73-0E400AD7A356}"
 EndProject
