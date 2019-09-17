@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Polyrific.Project.Mvc\Polyrific.Project.Mvc.csproj" />
+    <ProjectReference Include="..\SampleMvc.Core\SampleMvc.Core.csproj" />
   </ItemGroup>
 
 </Project>
