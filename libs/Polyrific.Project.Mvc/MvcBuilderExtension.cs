@@ -2,6 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Polyrific.Project.Mvc
 {
+    /// <summary>
+    /// The extension class for the mvc project
+    /// </summary>
     public static class MvcBuilderExtension
     {
         /// <summary>

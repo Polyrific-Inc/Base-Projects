@@ -2,6 +2,9 @@
 
 namespace Polyrific.Project.Core
 {
+    /// <summary>
+    /// The entity base class
+    /// </summary>
     public abstract class BaseEntity
     {
         /// <summary>

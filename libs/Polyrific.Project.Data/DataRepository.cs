@@ -8,15 +8,32 @@ using System.Threading.Tasks;
 
 namespace Polyrific.Project.Data
 {
+    /// <summary>
+    /// The base class of the repository
+    /// </summary>
+    /// <typeparam name="TEntity">Entity to be used in the repository</typeparam>
     public class DataRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
+        /// <summary>
+        /// The Db Context of the repository
+        /// </summary>
         protected readonly DbContext Db;
 
+        /// <summary>
+        /// The DataRepository constructor
+        /// </summary>
+        /// <param name="db">The db context that can be injected</param>
         public DataRepository(DbContext db)
         {
             Db = db;
         }
 
+        /// <summary>
+        /// Do count operation to the db
+        /// </summary>
+        /// <param name="spec">The specification of the count</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns>The count result</returns>
         public virtual async Task<int> CountBySpec(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -34,6 +51,12 @@ namespace Polyrific.Project.Data
             return await secondaryResult.CountAsync(spec.Criteria, cancellationToken);
         }
 
+        /// <summary>
+        /// Create an entry to the db
+        /// </summary>
+        /// <param name="entity">The entity to be created</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns>The new Id of the created entity</returns>
         public virtual async Task<int> Create(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -45,6 +68,12 @@ namespace Polyrific.Project.Data
             return entity.Id;
         }
 
+        /// <summary>
+        /// Delete an entry in the db
+        /// </summary>
+        /// <param name="id">Id of the entity to be deleted</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns></returns>
         public virtual async Task Delete(int id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -55,11 +84,23 @@ namespace Polyrific.Project.Data
             await Db.SaveChangesAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Get an entry in the db using the entity id
+        /// </summary>
+        /// <param name="id">Id of the entity to be retrieved</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns>The entity object</returns>
         public virtual Task<TEntity> GetById(int id, CancellationToken cancellationToken = default)
         {
             return Db.Set<TEntity>().FindAsync(id, cancellationToken);
         }
 
+        /// <summary>
+        /// Get entries in the db using a specification
+        /// </summary>
+        /// <param name="spec">The specification of the get operation</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns>The list of the entity</returns>
         public virtual async Task<IEnumerable<TEntity>> GetBySpec(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -90,6 +131,12 @@ namespace Polyrific.Project.Data
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Get a single entry in the db using a specification
+        /// </summary>
+        /// <param name="spec">The specification</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns>An entity object</returns>
         public virtual async Task<TEntity> GetSingleBySpec(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -119,6 +166,12 @@ namespace Polyrific.Project.Data
                 .FirstOrDefaultAsync(spec.Criteria, cancellationToken);
         }
 
+        /// <summary>
+        /// Update an entry in the db
+        /// </summary>
+        /// <param name="entity">The entity to be updated</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
+        /// <returns></returns>
         public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

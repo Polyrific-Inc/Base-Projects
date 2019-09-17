@@ -5,8 +5,16 @@ using System;
 
 namespace Polyrific.Project.Data
 {
+    /// <summary>
+    /// Entity config base class
+    /// </summary>
+    /// <typeparam name="TEntity">The entity to configure</typeparam>
     public abstract class BaseEntityConfig<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity
     {
+        /// <summary>
+        /// Configure the property in base entity
+        /// </summary>
+        /// <param name="builder">The entity type builder instance</param>
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.Property(e => e.ConcurrencyStamp).IsConcurrencyToken();
