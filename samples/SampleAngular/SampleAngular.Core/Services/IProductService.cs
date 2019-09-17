@@ -6,7 +6,7 @@ namespace SampleAngular.Core.Services
 {
     public interface IProductService
     {
-        Task<int> AddProduct(string name);
+        Task<int> AddProduct(Product product);
         Task<IEnumerable<Product>> GetProducts();
     }
 }

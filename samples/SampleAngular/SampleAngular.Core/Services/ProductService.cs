@@ -15,13 +15,8 @@ namespace SampleAngular.Core.Services
             _productRepository = productRepository;
         }
 
-        public Task<int> AddProduct(string name)
+        public Task<int> AddProduct(Product newProduct)
         {
-            var newProduct = new Product
-            {
-                Name = name
-            };
-
             return _productRepository.Create(newProduct);
         }
 

@@ -1,21 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SampleAngular.Infrastructure;
 
 namespace SampleAngular.Api
 {
     public class Startup
     {
+        private readonly string _allowSpecificOriginsPolicy = "_allowSpecificOriginsPolicy";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +27,18 @@ namespace SampleAngular.Api
                 .RegisterDbContext(Configuration.GetConnectionString("DefaultConnection"))
                 .RegisterRepositories()
                 .RegisterServices();
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_allowSpecificOriginsPolicy, builder => builder
+                    .WithOrigins(Configuration["AllowedOrigin"].Split(","))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+                );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +54,8 @@ namespace SampleAngular.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(_allowSpecificOriginsPolicy);
 
             app.UseEndpoints(endpoints =>
             {

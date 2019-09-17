@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0-rc1.19456.14">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -15,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SampleAngular.Core\SampleAngular.Core.csproj" />
+    <ProjectReference Include="..\SampleAngular.Dto\SampleAngular.Dto.csproj" />
     <ProjectReference Include="..\SampleAngular.Infrastructure\SampleAngular.Infrastructure.csproj" />
   </ItemGroup>
 
