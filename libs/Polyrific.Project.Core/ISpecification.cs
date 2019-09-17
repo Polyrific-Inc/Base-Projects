@@ -4,6 +4,10 @@ using System.Linq.Expressions;
 
 namespace Polyrific.Project.Core
 {
+    /// <summary>
+    /// Base interface of the specification
+    /// </summary>
+    /// <typeparam name="TEntity">The entity class used in the specification</typeparam>
     public interface ISpecification<TEntity> where TEntity : BaseEntity
     {
         /// <summary>

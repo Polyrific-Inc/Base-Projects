@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 
 namespace Polyrific.Project.Core
 {
+    /// <summary>
+    /// Base interface of the repository
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         /// <summary>
