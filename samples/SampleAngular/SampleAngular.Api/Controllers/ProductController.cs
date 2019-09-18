@@ -34,5 +34,27 @@ namespace SampleAngular.Api.Controllers
             var newProduct = _mapper.Map<Product>(product);
             await _productService.AddProduct(newProduct);
         }
+
+        [HttpPut]
+        public async Task Put([FromBody] ProductDto product)
+        {
+            var updatedProduct = _mapper.Map<Product>(product);
+            await _productService.UpdateProduct(updatedProduct);
+        }
+
+        [HttpGet]
+        [Route("{productId}")]
+        public async Task<ProductDto> GetById(int productId)
+        {
+            var product = await _productService.GetProduct(productId);
+            return _mapper.Map<ProductDto>(product);
+        }
+
+        [HttpDelete]
+        [Route("{productId}")]
+        public async Task Delete(int productId)
+        {
+            await _productService.DeleteProduct(productId);
+        }
     }
 }

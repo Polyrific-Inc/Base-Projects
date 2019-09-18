@@ -13,4 +13,20 @@ export class ProductService {
   getProducts(): Observable<ProductDto[]> {
     return this.apiService.get<ProductDto[]>('product');
   }
+
+  getProduct(productId: number): Observable<ProductDto> {
+    return this.apiService.get<ProductDto>(`product/${productId}`);
+  }
+
+  createProduct(product: ProductDto) {
+    return this.apiService.post('product', product);
+  }
+
+  updateProduct(product: ProductDto) {
+    return this.apiService.put('product', product);
+  }
+
+  deleteProduct(productId: number) {
+    return this.apiService.delete(`product/${productId}`);
+  }
 }

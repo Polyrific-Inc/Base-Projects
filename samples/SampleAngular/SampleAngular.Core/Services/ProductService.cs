@@ -20,9 +20,26 @@ namespace SampleAngular.Core.Services
             return _productRepository.Create(newProduct);
         }
 
+        public Task DeleteProduct(int productId)
+        {
+            return _productRepository.Delete(productId);
+        }
+
+        public Task<Product> GetProduct(int productId)
+        {
+            return _productRepository.GetById(productId);
+        }
+
         public Task<IEnumerable<Product>> GetProducts()
         {
             return _productRepository.GetBySpec(new ProductSpecification());
+        }
+
+        public async Task UpdateProduct(Product product)
+        {
+            var entity = await _productRepository.GetById(product.Id);
+            entity.SetEntity(product);
+            await _productRepository.Update(entity);
         }
     }
 }

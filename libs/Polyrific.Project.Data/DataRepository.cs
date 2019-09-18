@@ -92,7 +92,7 @@ namespace Polyrific.Project.Data
         /// <returns>The entity object</returns>
         public virtual Task<TEntity> GetById(int id, CancellationToken cancellationToken = default)
         {
-            return Db.Set<TEntity>().FindAsync(id, cancellationToken);
+            return Db.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken).AsTask();
         }
 
         /// <summary>

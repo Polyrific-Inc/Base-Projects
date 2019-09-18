@@ -1,0 +1,9 @@
+<h1>Edit Product</h1>
+<form [formGroup]="productForm" (submit)="onSubmit()">
+  <div class="form-group">
+    <label for="id">Id</label>
+    <input type="text" class="form-control" formControlName="id" id="id">
+  </div>
+  <app-product-form [productForm]="productForm" [submitted]="submitted"></app-product-form>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

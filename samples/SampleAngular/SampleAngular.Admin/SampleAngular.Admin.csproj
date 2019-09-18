@@ -24,11 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\app-routing.module.ts" />
     <None Remove="ClientApp\src\app\config\config.service.provider.ts" />
     <None Remove="ClientApp\src\app\core\models\product\product-dto.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\app-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\config\config.service.provider.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\core\models\product\product-dto.ts" />
   </ItemGroup>

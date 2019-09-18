@@ -9,7 +9,7 @@ namespace SampleAngular.Api.AutoMapperProfiles
         public ProductAutoMapperProfile()
         {
             CreateMap<Product, ProductDto>();
-            CreateMap<ProductDto, ProductDto>();
+            CreateMap<ProductDto, Product>();
         }
     }
 }
