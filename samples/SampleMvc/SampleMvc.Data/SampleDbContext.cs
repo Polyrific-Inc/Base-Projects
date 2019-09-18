@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SampleMvc.Core.Entities;
 using SampleMvc.Data.EntityConfigs;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SampleMvc.Data.Identity;
 
 namespace SampleMvc.Data
 {
-    public class SampleDbContext : DbContext
+    public class SampleDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
     {
         public SampleDbContext(DbContextOptions<SampleDbContext> options)
             : base(options)
@@ -22,6 +21,14 @@ namespace SampleMvc.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ProductConfig());
+
+            modelBuilder.ApplyConfiguration(new ApplicationUserConfig());
+            modelBuilder.ApplyConfiguration(new ApplicationRoleConfig());
+            modelBuilder.ApplyConfiguration(new ApplicationUserRoleConfig());
+            modelBuilder.ApplyConfiguration(new ApplicationUserClaimConfig());
+            modelBuilder.ApplyConfiguration(new ApplicationUserLoginConfig());
+            modelBuilder.ApplyConfiguration(new ApplicationRoleClaimConfig());
+            modelBuilder.ApplyConfiguration(new ApplicationUserTokenConfig());
         }
     }
 }

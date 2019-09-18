@@ -1,0 +1,13 @@
+<!--OpenCatapultModelId:109-->
+@model SampleMvc.Admin.Models.UserViewModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+<h2>@ViewData["Title"]</h2>
+<form method="post" asp-route-id="@ViewData["Id"]">
+    <h3>Confirm delete User?</h3>
+     <input type="submit" value="Delete" class="btn btn-danger" />
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

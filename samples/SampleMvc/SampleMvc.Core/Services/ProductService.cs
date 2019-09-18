@@ -1,5 +1,7 @@
 ﻿using Polyrific.Project.Core;
 using SampleMvc.Core.Entities;
+using SampleMvc.Core.Specifications;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SampleMvc.Core.Services
@@ -13,14 +15,31 @@ namespace SampleMvc.Core.Services
             _productRepository = productRepository;
         }
 
-        public Task<int> AddProduct(string name)
+        public Task<int> AddProduct(Product newProduct)
         {
-            var newProduct = new Product
-            {
-                Name = name
-            };
-
             return _productRepository.Create(newProduct);
+        }
+
+        public Task DeleteProduct(int productId)
+        {
+            return _productRepository.Delete(productId);
+        }
+
+        public Task<Product> GetProduct(int productId)
+        {
+            return _productRepository.GetById(productId);
+        }
+
+        public Task<IEnumerable<Product>> GetProducts()
+        {
+            return _productRepository.GetBySpec(new ProductSpecification());
+        }
+
+        public async Task UpdateProduct(Product product)
+        {
+            var entity = await _productRepository.GetById(product.Id);
+            entity.SetEntity(product);
+            await _productRepository.Update(entity);
         }
     }
 }

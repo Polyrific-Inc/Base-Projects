@@ -1,0 +1,10 @@
+@{
+    if (User.IsInRole(SampleMvc.Core.Constants.UserRole.Administrator))
+    {
+        Layout = "/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = "/Views/Shared/_Layout.cshtml";
+    }
+}
