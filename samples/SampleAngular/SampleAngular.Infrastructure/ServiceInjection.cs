@@ -11,6 +11,7 @@ namespace SampleAngular.Infrastructure
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IUserService, UserService>();
 
             return services;
         }

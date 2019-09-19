@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SampleAngular.Api.Identity;
 using SampleAngular.Core.Entities;
 using SampleAngular.Core.Services;
 using SampleAngular.Dto;
@@ -29,6 +31,7 @@ namespace SampleAngular.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizePolicy.UserRoleAdminAccess)]
         public async Task Post([FromBody] ProductDto product)
         {
             var newProduct = _mapper.Map<Product>(product);
@@ -36,6 +39,7 @@ namespace SampleAngular.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizePolicy.UserRoleAdminAccess)]
         public async Task Put([FromBody] ProductDto product)
         {
             var updatedProduct = _mapper.Map<Product>(product);
@@ -52,6 +56,7 @@ namespace SampleAngular.Api.Controllers
 
         [HttpDelete]
         [Route("{productId}")]
+        [Authorize(Policy = AuthorizePolicy.UserRoleAdminAccess)]
         public async Task Delete(int productId)
         {
             await _productService.DeleteProduct(productId);
