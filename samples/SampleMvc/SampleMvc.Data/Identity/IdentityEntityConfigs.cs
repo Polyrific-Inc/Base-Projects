@@ -15,7 +15,7 @@ namespace SampleMvc.Data.Identity
 
         private ApplicationUser CreateInitialUser()
         {
-            var user = new ApplicationUser(1, "brain.konasara@polyrific.com")
+            var user = new ApplicationUser(1, "admin@opencatapult.net")
             {
                 EmailConfirmed = true,
                 IsActive = true,

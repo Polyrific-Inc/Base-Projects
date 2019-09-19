@@ -194,17 +194,17 @@ namespace SampleMvc.Data.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "6e60fade-1c1f-4f6a-ab7e-768358780783",
-                            Email = "brain.konasara@polyrific.com",
+                            Email = "admin@opencatapult.net",
                             EmailConfirmed = true,
                             IsActive = true,
                             LockoutEnabled = false,
-                            NormalizedEmail = "BRAIN.KONASARA@POLYRIFIC.COM",
-                            NormalizedUserName = "BRAIN.KONASARA@POLYRIFIC.COM",
+                            NormalizedEmail = "ADMIN@OPENCATAPULT.NET",
+                            NormalizedUserName = "ADMIN@OPENCATAPULT.NET",
                             PasswordHash = "AQAAAAEAACcQAAAAEKBBPo49hQnfSTCnZPTPvpdvqOA5YKXoS8XT6S4hbX9vVTzjKzgXGmUUKWnpOvyjhA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "D4ZMGAXVOVP33V5FMDWVCZ7ZMH5R2JCK",
                             TwoFactorEnabled = false,
-                            UserName = "brain.konasara@polyrific.com"
+                            UserName = "admin@opencatapult.net"
                         });
                 });
 
@@ -234,12 +234,10 @@ namespace SampleMvc.Data.Migrations
             modelBuilder.Entity("SampleMvc.Data.Identity.ApplicationUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -282,12 +280,10 @@ namespace SampleMvc.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");

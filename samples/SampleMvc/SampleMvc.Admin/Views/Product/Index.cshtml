@@ -10,17 +10,17 @@
 <div>&nbsp;</div>
 <table class="table">
     <tr>
-        <th>Description</th>
-        <th>Title</th>
-        <th>Price</th>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Updated</th>
         <th></th>
     </tr>
 @foreach (var item in Model)
 {
     <tr>
-        <td>@item.Description</td>
-        <td>@item.Title</td>
-        <td>@item.Price</td>
+        <td>@item.Name</td>
+        <td>@item.Created.ToShortDateString()</td>
+        <td>@item.Updated?.ToShortDateString()</td>
         <td>
             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

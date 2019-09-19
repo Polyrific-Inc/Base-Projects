@@ -12,7 +12,6 @@ using SampleMvc.Admin.Identity;
 namespace SampleMvc.Admin.Controllers
 {
     [Authorize(Policy = AuthorizePolicy.UserRoleAdminAccess)]
-    [Area("Admin")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;

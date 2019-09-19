@@ -113,8 +113,8 @@ namespace SampleMvc.Data.Migrations
                 name: "UserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -158,8 +158,8 @@ namespace SampleMvc.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -186,7 +186,7 @@ namespace SampleMvc.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "6e60fade-1c1f-4f6a-ab7e-768358780783", "brain.konasara@polyrific.com", true, null, true, null, false, null, "BRAIN.KONASARA@POLYRIFIC.COM", "BRAIN.KONASARA@POLYRIFIC.COM", "AQAAAAEAACcQAAAAEKBBPo49hQnfSTCnZPTPvpdvqOA5YKXoS8XT6S4hbX9vVTzjKzgXGmUUKWnpOvyjhA==", null, false, "D4ZMGAXVOVP33V5FMDWVCZ7ZMH5R2JCK", false, "brain.konasara@polyrific.com" });
+                values: new object[] { 1, 0, "6e60fade-1c1f-4f6a-ab7e-768358780783", "admin@opencatapult.net", true, null, true, null, false, null, "ADMIN@OPENCATAPULT.NET", "ADMIN@OPENCATAPULT.NET", "AQAAAAEAACcQAAAAEKBBPo49hQnfSTCnZPTPvpdvqOA5YKXoS8XT6S4hbX9vVTzjKzgXGmUUKWnpOvyjhA==", null, false, "D4ZMGAXVOVP33V5FMDWVCZ7ZMH5R2JCK", false, "admin@opencatapult.net" });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",

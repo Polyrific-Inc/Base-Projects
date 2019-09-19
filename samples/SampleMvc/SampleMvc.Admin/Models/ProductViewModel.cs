@@ -6,8 +6,8 @@ namespace SampleMvc.Admin.Models
 {
     public class ProductViewModel : BaseViewModel
     {
-        public string Description { get; set; }
-        public string Title { get; set; }
-        public decimal Price { get; set; }
+        public string Name { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Updated { get; set; }
     }
 }

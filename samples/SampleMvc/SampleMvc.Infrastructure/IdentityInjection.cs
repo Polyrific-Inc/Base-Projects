@@ -7,13 +7,14 @@ namespace SampleMvc.Infrastructure
 {
     public static class IdentityInjection
     {
-        public static void AddAppIdentity(this IServiceCollection services)
+        public static IdentityBuilder AddAppIdentity(this IServiceCollection services)
         {
-            services.AddDefaultIdentity<ApplicationUser>()
-                    .AddRoles<ApplicationRole>()
+            var identityBuilder = services.AddIdentity<ApplicationUser, ApplicationRole>()
                     .AddEntityFrameworkStores<SampleDbContext>();
-
+            
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+
+            return identityBuilder;
         }
     }
 }

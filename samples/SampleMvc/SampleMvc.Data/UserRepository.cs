@@ -32,7 +32,13 @@ namespace SampleMvc.Data
             cancellationToken.ThrowIfCancellationRequested();
 
             var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent, lockoutOnFailure);
-            return _mapper.Map<Core.Entities.SignInResult>(result);
+            return new Core.Entities.SignInResult
+            {
+                Succeeded = result.Succeeded,
+                RequiresTwoFactor = result.RequiresTwoFactor,
+                IsLockedOut = result.IsLockedOut,
+                IsNotAllowed = result.IsNotAllowed
+            };
         }
 
         public async Task ConfirmEmail(int userId, string token, CancellationToken cancellationToken = default(CancellationToken))
