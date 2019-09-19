@@ -4,9 +4,9 @@
     <id>Polyrific.Project.Data</id>
     <version>1.0.0-beta.1</version>
     <title>Polyrific.Project.Data</title>
-    <authors>frandi-polyrific</authors>
-    <owners>frandi-polyrific</owners>
-    <licenseUrl>https://github.com/Polyrific-Inc/Base-Projects/blob/master/LICENSE</licenseUrl>
+    <authors>Polyrific</authors>
+    <owners>Polyrific</owners>
+    <license>https://github.com/Polyrific-Inc/Base-Projects/blob/master/LICENSE</license>
     <projectUrl>https://polyrific-inc.github.io/Base-Projects</projectUrl>
     <iconUrl>https://polyrific-inc.github.io/Base-Projects/assets/images/polyrific-logo.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
