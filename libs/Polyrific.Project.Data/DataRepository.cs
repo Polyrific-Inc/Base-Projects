@@ -17,13 +17,13 @@ namespace Polyrific.Project.Data
         /// <summary>
         /// The Db Context of the repository
         /// </summary>
-        protected readonly DbContext Db;
+        protected readonly ApplicationDbContext Db;
 
         /// <summary>
         /// The DataRepository constructor
         /// </summary>
         /// <param name="db">The db context that can be injected</param>
-        public DataRepository(DbContext db)
+        public DataRepository(ApplicationDbContext db)
         {
             Db = db;
         }

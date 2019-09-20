@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Polyrific.Project.Data;
 using SampleMvc.Data;
 
 namespace SampleMvc.Infrastructure
@@ -13,7 +14,7 @@ namespace SampleMvc.Infrastructure
         /// <param name="connectionString">Connection string for the database</param>
         public static IServiceCollection RegisterDbContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<DbContext, SampleDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext, SampleDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             }).AddDbContext<SampleDbContext>(options =>

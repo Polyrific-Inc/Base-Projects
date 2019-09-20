@@ -1,47 +1,47 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Polyrific.Project.Mvc;
-using SampleMvc.Admin.Models;
-using SampleMvc.Core.Entities;
-using SampleMvc.Core.Services;
+using Polyrific.Project.Core;
+using Polyrific.Project.Core.Entities;
+using Polyrific.Project.Mvc.Areas.Account.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SampleMvc.Admin.Controllers
+namespace Polyrific.Project.Mvc.Areas.Account.Controllers
 {
+    [Area("Account")]
     [Authorize(Policy = AuthorizePolicy.UserRoleAdminAccess)]
-    public class ProductController : Controller
+    public class UserController : Controller
     {
-        private readonly IProductService _productService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper)
         {
-            _productService = productService;
+            _userService = userService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            var data = await _productService.GetProducts();
-            var models = _mapper.Map<List<ProductViewModel>>(data);
+            var data = await _userService.GetUsers();
+            var models = _mapper.Map<List<UserViewModel>>(data);
             return View(models);
         }
 
         public IActionResult Create()
         {
-            return View(new ProductViewModel());
+            return View(new UserViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductViewModel model)
+        public async Task<IActionResult> Create(int id, UserViewModel model)
         {
             try
             {
-                var entity = _mapper.Map<Product>(model);
-                await _productService.AddProduct(entity);
+                var entity = _mapper.Map<User>(model);
+                await _userService.CreateUser(entity);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -52,19 +52,19 @@ namespace SampleMvc.Admin.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var data = await _productService.GetProduct(id);
-            var model = _mapper.Map<ProductViewModel>(data);
+            var data = await _userService.GetUserById(id);
+            var model = _mapper.Map<UserViewModel>(data);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProductViewModel model)
+        public async Task<IActionResult> Edit(int id, UserViewModel model)
         {
             try
             {
-                var entity = _mapper.Map<Product>(model);
-                await _productService.UpdateProduct(entity);
+                var entity = _mapper.Map<User>(model);
+                await _userService.UpdateUser(entity);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -81,11 +81,11 @@ namespace SampleMvc.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, ProductViewModel model)
+        public async Task<IActionResult> Delete(int id, UserViewModel model)
         {
             try
             {
-                await _productService.DeleteProduct(id);
+                await _userService.DeleteUser(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

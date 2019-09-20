@@ -1,6 +1,5 @@
-///OpenCatapultModelId:111
+using Polyrific.Project.Mvc.Models;
 using System;
-using System.Collections.Generic;
 
 namespace SampleMvc.Admin.Models
 {

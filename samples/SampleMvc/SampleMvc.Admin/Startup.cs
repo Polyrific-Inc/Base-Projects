@@ -1,15 +1,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polyrific.Project.Mvc;
-using SampleMvc.Admin.Areas.Identity.Services;
-using SampleMvc.Admin.Identity;
-using SampleMvc.Core.Constants;
 using SampleMvc.Infrastructure;
 
 namespace SampleMvc.Admin
@@ -26,26 +21,16 @@ namespace SampleMvc.Admin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddControllersWithViews()
-                .AddBaseProjectControllers(); // Add controllers from Polyrific base project
+            services.AddBaseProject(Configuration, false);
 
             services
                 .RegisterDbContext(Configuration.GetConnectionString("DefaultConnection"))
                 .RegisterRepositories()
                 .RegisterServices();
 
-            services.AddAppIdentity().AddDefaultUI();
             services.AddRazorPages();
             services.AddAuthentication();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(AuthorizePolicy.UserRoleAdminAccess, policy => policy.RequireRole(UserRole.Administrator));
-                options.AddPolicy(AuthorizePolicy.UserRoleGuestAccess, policy => policy.RequireRole(UserRole.Administrator, UserRole.Guest));
-            });
-
-            services.AddEmail(Configuration);
             services.AddAutoMapper(typeof(Startup).Assembly);
         }
 

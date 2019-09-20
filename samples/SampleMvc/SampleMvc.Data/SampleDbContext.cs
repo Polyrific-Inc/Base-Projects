@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Polyrific.Project.Data;
 using SampleMvc.Core.Entities;
 using SampleMvc.Data.EntityConfigs;
-using SampleMvc.Data.Identity;
 
 namespace SampleMvc.Data
 {
-    public class SampleDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
+    public class SampleDbContext : ApplicationDbContext
     {
-        public SampleDbContext(DbContextOptions<SampleDbContext> options)
+        public SampleDbContext(DbContextOptions options)
             : base(options)
         {
 
@@ -21,14 +20,6 @@ namespace SampleMvc.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ProductConfig());
-
-            modelBuilder.ApplyConfiguration(new ApplicationUserConfig());
-            modelBuilder.ApplyConfiguration(new ApplicationRoleConfig());
-            modelBuilder.ApplyConfiguration(new ApplicationUserRoleConfig());
-            modelBuilder.ApplyConfiguration(new ApplicationUserClaimConfig());
-            modelBuilder.ApplyConfiguration(new ApplicationUserLoginConfig());
-            modelBuilder.ApplyConfiguration(new ApplicationRoleClaimConfig());
-            modelBuilder.ApplyConfiguration(new ApplicationUserTokenConfig());
         }
     }
 }
