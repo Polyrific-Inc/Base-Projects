@@ -12,8 +12,6 @@ namespace SampleAngular.Core.Services
     {
         Task<SignInResult> PasswordSignInAsync(string email, string password, bool isPersistent, bool lockoutOnFailure, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<User> CreateUser(string email, string password, CancellationToken cancellationToken = default(CancellationToken));
-
         Task<User> CreateUser(User user, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         Task UpdateUser(User user, CancellationToken cancellationToken = default(CancellationToken));

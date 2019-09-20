@@ -6,6 +6,8 @@ import { AuthorizePolicy } from '@app/core/auth/authorize-policy';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 
 const routes: Routes = [
   {
@@ -34,6 +36,14 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     component: ForgotPasswordComponent
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent
+  },
+  {
+    path: 'confirm-email',
+    component: ConfirmEmailComponent
   },
 ];
 

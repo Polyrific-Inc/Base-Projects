@@ -38,29 +38,13 @@ namespace SampleAngular.Core.Services
             await _userRepository.ConfirmEmail(userId, token, cancellationToken);
         }
 
-        public async Task<User> CreateUser(string email, string password, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var user = new User
-            {
-                UserName = email,
-                Email = email
-            };
-
-            var id = await _userRepository.Create(user, password, cancellationToken);
-            if (id > 0)
-                user.Id = id;
-
-            return user;
-        }
-
         public async Task<User> CreateUser(User user, string password, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            // set default username
+            // set default values
             user.UserName = !string.IsNullOrEmpty(user.UserName) ? user.UserName : user.Email;
+            user.IsActive = true;
 
             var id = await _userRepository.Create(user, password, cancellationToken);
             if (id > 0)
@@ -149,6 +133,7 @@ namespace SampleAngular.Core.Services
         public async Task UpdateUser(User user, CancellationToken cancellationToken = default(CancellationToken))
         {
             await _userRepository.Update(user, cancellationToken);
+            await SetUserRole(user.Id, user.Role, cancellationToken);
         }
 
         public async Task SetUserRole(int userId, string roleName, CancellationToken cancellationToken = default(CancellationToken))

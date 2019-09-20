@@ -36,6 +36,7 @@ namespace SampleAngular.Api
 
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(Data.SampleDbContext).Assembly);
 
+            services.AddEmail(Configuration);
             services.AddAppIdentity();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims

@@ -15,6 +15,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { HomeLayoutComponent } from './home-layout/home-layout.component';
 import { CoreModule } from './core/core.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     ResetPasswordComponent,
     UnauthorizedComponent,
     HomeLayoutComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ConfirmEmailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -26,6 +26,6 @@ namespace SampleAngular.Dto
         /// <summary>
         /// Name of the role
         /// </summary>
-        public string RoleName { get; set; }
+        public string Role { get; set; }
     }
 }

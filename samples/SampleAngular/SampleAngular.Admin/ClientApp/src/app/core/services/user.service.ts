@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { UserDto } from '../models/user/user-dto';
+import { ResetPasswordDto } from '../models/user/reset-password-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -28,5 +29,17 @@ export class UserService {
 
   deleteUser(userId: number) {
     return this.apiService.delete(`user/${userId}`);
+  }
+
+  requestResetPassword(username: string) {
+    return this.apiService.getString(`user/name/${username}/resetpassword`);
+  }
+
+  resetPassword(username: string, dto: ResetPasswordDto) {
+    return this.apiService.postString(`user/name/${username}/resetpassword`, dto);
+  }
+
+  confirmEmail(userId: number, token: string) {
+    return this.apiService.getString(`user/${userId}/confirm?token=${token}`);
   }
 }

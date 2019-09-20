@@ -115,7 +115,7 @@ namespace SampleAngular.Data
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.Include("Roles.Role").ToListAsync();
 
             return _mapper.Map<List<User>>(users);
         }
@@ -211,6 +211,7 @@ namespace SampleAngular.Data
             cancellationToken.ThrowIfCancellationRequested();
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == entity.Id);
+            entity.Email = user.Email;
             if (user != null)
             {
                 user = _mapper.Map(entity, user);

@@ -15,6 +15,9 @@ using SampleAngular.Api;
 using SampleAngular.Core.Constants;
 using SampleAngular.Core.Exceptions;
 using Microsoft.Extensions.Configuration;
+using System.Text.Encodings.Web;
+using System.Text;
+using System.Web;
 
 namespace SampleAngular.Api.Controllers
 {
@@ -24,19 +27,20 @@ namespace SampleAngular.Api.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        //private readonly INotificationProvider _notificationProvider;
+        private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
 
         public UserController(
             IUserService service,
             IMapper mapper,
+            IEmailSender emailSender,
             IConfiguration configuration,
             ILogger<UserController> logger)
         {
             _userService = service;            
             _mapper = mapper;
-            //_notificationProvider = notificationProvider;
+            _emailSender = emailSender;
             _configuration = configuration;
             _logger = logger;
         }
@@ -52,13 +56,19 @@ namespace SampleAngular.Api.Controllers
         {
             _logger.LogRequest("Registering user. Request body: {@dto}", dto);
 
-            User user = null;
+            User user;
 
             try
             {
                 var temporaryPassword = await _userService.GeneratePassword();
                 var entity = _mapper.Map<User>(dto);
                 user = await _userService.CreateUser(entity, temporaryPassword);
+                var confirmToken = await _userService.GenerateConfirmationToken(user.Id);
+                var confirmUrl = $"{_configuration["WebUrl"]}/confirm-email?userId={user.Id}&token={HttpUtility.UrlEncode(confirmToken)}";
+                var sb = new StringBuilder($"Please confirm your account by <a href='{confirmUrl}'>clicking here</a>.");
+                sb.AppendLine($"You can use the following password for first time login: {temporaryPassword}");
+
+                await _emailSender.SendEmailAsync(user.Email, "Confirm your email", sb.ToString());
             }
             catch (Exception ex)
             {
@@ -272,38 +282,13 @@ namespace SampleAngular.Api.Controllers
             var token = await _userService.GetResetPasswordToken(user.Id);
 
             var originUrl = Request.Headers["Origin"];
-
-            // TODO: We might want to make this part similar with how we do it in mvc project
-            //if (!string.IsNullOrEmpty(originUrl))
-            //{
-
-            //    await _notificationProvider.SendNotification(new SendNotificationRequest
-            //    {
-            //        MessageType = NotificationConfig.ResetPasswordWeb,
-            //        Emails = new List<string>
-            //            {
-            //                user.Email
-            //            }
-            //    }, new Dictionary<string, string>
-            //        {
-            //            {MessageParameter.ResetPasswordLink, $"{originUrl}/reset-password?username={username}&token={HttpUtility.UrlEncode(token)}"}
-            //        });
-            //}
-            //else
-            //{
-            //    await _notificationProvider.SendNotification(new SendNotificationRequest
-            //    {
-            //        MessageType = NotificationConfig.ResetPassword,
-            //        Emails = new List<string>
-            //            {
-            //                user.Email
-            //            }
-            //    }, new Dictionary<string, string>
-            //        {
-            //            {MessageParameter.ResetPasswordToken, token}
-            //        });
-            //}
-
+            var resetPasswordUrl = $"{originUrl}/reset-password?username={username}&token={HttpUtility.UrlEncode(token)}";
+            
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                "Reset Password",
+                $"Please reset your password by <a href='{resetPasswordUrl}'>clicking here</a>.");
+            
             _logger.LogResponse("Password reset notification for user {username} sent", username);
 
             return Ok();
