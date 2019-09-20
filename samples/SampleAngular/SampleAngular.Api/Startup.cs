@@ -89,11 +89,12 @@ namespace SampleAngular.Api
 
             app.UseHttpsRedirection();
 
+            app.UseCors(_allowSpecificOriginsPolicy);
+
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseCors(_allowSpecificOriginsPolicy);
 
             app.UseEndpoints(endpoints =>
             {
