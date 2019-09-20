@@ -124,7 +124,7 @@ namespace SampleAngular.Data
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            var user = await _userManager.Users.Include("Roles.Role").FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
             if (user != null)
                 return _mapper.Map<User>(user);
 

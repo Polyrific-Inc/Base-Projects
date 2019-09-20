@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +14,7 @@ using SampleAngular.Dto;
 using SampleAngular.Api;
 using SampleAngular.Core.Constants;
 using SampleAngular.Core.Exceptions;
+using Microsoft.Extensions.Configuration;
 
 namespace SampleAngular.Api.Controllers
 {
@@ -46,7 +46,7 @@ namespace SampleAngular.Api.Controllers
         /// </summary>
         /// <param name="dto">The register request body</param>
         /// <returns>The user id and confirmation token</returns>
-        [HttpPost("Register")]
+        [HttpPost]
         [Authorize(Policy = AuthorizePolicy.UserRoleAdminAccess)]
         public async Task<IActionResult> RegisterUser(RegisterUserDto dto)
         {

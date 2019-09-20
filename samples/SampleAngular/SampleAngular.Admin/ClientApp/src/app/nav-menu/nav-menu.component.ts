@@ -21,7 +21,7 @@ export class NavMenuComponent implements OnInit {
       } else {
         this.isLoggedIn = false;
       }
-    })
+    });
   }
 
   collapse() {

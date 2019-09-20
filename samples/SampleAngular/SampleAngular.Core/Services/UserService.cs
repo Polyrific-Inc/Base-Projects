@@ -59,6 +59,9 @@ namespace SampleAngular.Core.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            // set default username
+            user.UserName = !string.IsNullOrEmpty(user.UserName) ? user.UserName : user.Email;
+
             var id = await _userRepository.Create(user, password, cancellationToken);
             if (id > 0)
             {

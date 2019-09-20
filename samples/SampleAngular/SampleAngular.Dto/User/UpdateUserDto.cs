@@ -26,5 +26,10 @@ namespace SampleAngular.Dto
         /// Last Name of the user
         /// </summary>
         public string LastName { get; set; }
+
+        /// <summary>
+        /// Role of the user
+        /// </summary>
+        public string Role { get; set; }
     }
 }

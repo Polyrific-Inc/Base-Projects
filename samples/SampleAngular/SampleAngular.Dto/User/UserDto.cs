@@ -4,7 +4,7 @@ namespace SampleAngular.Dto
 {
     public class UserDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Username of the user

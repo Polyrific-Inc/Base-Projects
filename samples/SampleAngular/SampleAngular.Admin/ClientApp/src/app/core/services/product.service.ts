@@ -23,7 +23,7 @@ export class ProductService {
   }
 
   updateProduct(product: ProductDto) {
-    return this.apiService.put('product', product);
+    return this.apiService.put(`product/${product.id}`, product);
   }
 
   deleteProduct(productId: number) {
