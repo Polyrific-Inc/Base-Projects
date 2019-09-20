@@ -16,6 +16,9 @@ namespace SampleAngular.Infrastructure
             services.AddDbContext<DbContext, SampleDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
+            }).AddDbContext<SampleDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
             });
 
             return services;

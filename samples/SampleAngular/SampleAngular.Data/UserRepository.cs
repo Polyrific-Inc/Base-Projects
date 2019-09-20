@@ -190,7 +190,7 @@ namespace SampleAngular.Data
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            var appUser = await _userManager.Users.Include("Roles.Role").FirstOrDefaultAsync(u => u.UserName == userName);
 
             return _mapper.Map<User>(appUser);
         }

@@ -10,6 +10,8 @@ namespace SampleAngular.Data.Identity
         {
             builder.ToTable("Users");
 
+            builder.HasMany(x => x.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+
             builder.HasData(CreateInitialUser());
         }
 
@@ -51,6 +53,8 @@ namespace SampleAngular.Data.Identity
             builder.ToTable("UserRoles");
 
             builder.HasData(new ApplicationUserRole(1, 1));
+
+            builder.HasOne(x => x.Role).WithMany(r => r.UserRoles).HasForeignKey(r => r.RoleId).IsRequired();
         }
     }
 

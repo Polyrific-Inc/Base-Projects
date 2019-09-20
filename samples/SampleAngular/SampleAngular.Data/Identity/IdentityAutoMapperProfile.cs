@@ -21,7 +21,11 @@ namespace SampleAngular.Data.Identity
 	             .ForMember(dest => dest.LockoutEnd, opt => opt.Ignore())
 	             .ForMember(dest => dest.LockoutEnabled, opt => opt.Ignore())
 	             .ForMember(dest => dest.AccessFailedCount, opt => opt.Ignore());
-            CreateMap<ApplicationUser, User>();
+            CreateMap<ApplicationUser, User>()
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Roles.FirstOrDefault().Role.Name))
+                .ForMember(dest => dest.Created, opt => opt.Ignore())
+                .ForMember(dest => dest.Updated, opt => opt.Ignore())
+                .ForMember(dest => dest.ConcurrencyStamp, opt => opt.Ignore());
         }
     }
 }

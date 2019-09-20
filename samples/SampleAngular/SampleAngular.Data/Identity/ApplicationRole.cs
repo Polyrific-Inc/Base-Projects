@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace SampleAngular.Data.Identity
 {
@@ -17,6 +18,8 @@ namespace SampleAngular.Data.Identity
             Id = roleId;
             NormalizedName = roleName.ToUpper();
         }
+
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 }
 

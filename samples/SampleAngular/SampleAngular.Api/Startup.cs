@@ -34,7 +34,7 @@ namespace SampleAngular.Api
                 .RegisterRepositories()
                 .RegisterServices();
 
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(Data.SampleDbContext).Assembly);
 
             services.AddAppIdentity();
 

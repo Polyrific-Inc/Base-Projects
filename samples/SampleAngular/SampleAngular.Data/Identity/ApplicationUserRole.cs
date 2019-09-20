@@ -14,6 +14,8 @@ namespace SampleAngular.Data.Identity
             UserId = userId;
             RoleId = roleId;
         }
+
+        public ApplicationRole Role { get; set; }
     }
 }
 

@@ -11,7 +11,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 const routes: Routes = [
   {
     path: '',
-    //component: HomeLayoutComponent,
     canActivateChild: [AuthGuard],
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full' },

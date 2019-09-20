@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace SampleAngular.Data.Identity
 {
@@ -22,6 +23,8 @@ namespace SampleAngular.Data.Identity
         public bool IsActive { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
+
+        public virtual ICollection<ApplicationUserRole> Roles { get; set; }
     }
 }
 
