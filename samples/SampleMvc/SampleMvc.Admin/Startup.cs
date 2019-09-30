@@ -21,15 +21,19 @@ namespace SampleMvc.Admin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBaseProject(Configuration, false);
+            services.AddBaseProjectServices(Configuration, options =>
+            {
+                options.EnableIdentity = true;
+                options.UseDefaultUIForIdentity = false;
+                options.EnableSmtpEmailSender = true;
+            });
 
             services
                 .RegisterDbContext(Configuration.GetConnectionString("DefaultConnection"))
                 .RegisterRepositories()
                 .RegisterServices();
 
-            services.AddRazorPages();
-            services.AddAuthentication();
+            
 
             services.AddAutoMapper(typeof(Startup).Assembly);
         }
@@ -48,18 +52,9 @@ namespace SampleMvc.Admin
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            
 
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseBaseProjectServices();
         }
     }
 }

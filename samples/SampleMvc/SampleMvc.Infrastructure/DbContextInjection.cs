@@ -14,15 +14,7 @@ namespace SampleMvc.Infrastructure
         /// <param name="connectionString">Connection string for the database</param>
         public static IServiceCollection RegisterDbContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<ApplicationDbContext, SampleDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            }).AddDbContext<SampleDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
-
-            return services;
+            return services.RegisterDbContext<SampleDbContext>(connectionString);
         }
     }
 }

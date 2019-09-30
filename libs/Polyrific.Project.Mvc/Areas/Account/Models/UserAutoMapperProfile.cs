@@ -1,5 +1,4 @@
 using AutoMapper;
-using Polyrific.Project.Core.Entities;
 
 namespace Polyrific.Project.Mvc.Areas.Account.Models
 {
@@ -7,9 +6,9 @@ namespace Polyrific.Project.Mvc.Areas.Account.Models
     {
         public UserAutoMapperProfile()
         {
-            CreateMap<User, UserViewModel>();
+            CreateMap<Core.Entities.User, UserViewModel>();
 
-            CreateMap<UserViewModel, User>();
+            CreateMap<UserViewModel, Core.Entities.User>();
         }
     }
 }
