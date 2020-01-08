@@ -1,3 +1,4 @@
+using Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
