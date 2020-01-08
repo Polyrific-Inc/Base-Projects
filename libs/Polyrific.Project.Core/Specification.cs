@@ -1,22 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Polyrific.Project.Core
 {
     /// <summary>
-    /// The specification base class (obsolete). Please use <see cref="Specification"/> instead which is not an abstract class.
+    /// The specification base class.
     /// </summary>
     /// <typeparam name="TEntity">The entity class used in the specification</typeparam>
-    [Obsolete("Please use \"Specification\" instead which is not an abstract class.", false)]
-    public abstract class BaseSpecification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
+    public class Specification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
     {
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
+        public Specification(Expression<Func<TEntity, bool>> criteria)
         {
             Criteria = criteria;
         }
 
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false)
+        public Specification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false)
         {
             Criteria = criteria;
 
