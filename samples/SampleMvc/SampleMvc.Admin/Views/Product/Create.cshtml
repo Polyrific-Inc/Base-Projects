@@ -1,0 +1,20 @@
+<!--OpenCatapultModelId:111-->
+@model SampleMvc.Admin.Models.ProductViewModel
+@{
+    ViewData["Title"] = "Create Product";
+}
+<h2>@ViewData["Title"]</h2>
+<form method="post">
+    <div class="form-group row">
+        <label asp-for="Name" class="col-form-label col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" type="text" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+
+     <input type="submit" value="Save" class="btn btn-primary" />
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

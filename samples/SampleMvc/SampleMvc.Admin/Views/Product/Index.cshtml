@@ -1,0 +1,30 @@
+<!--OpenCatapultModelId:111-->
+@model List<SampleMvc.Admin.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "View Product";
+}
+<h2>@ViewData["Title"]</h2>
+<div>
+    <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-default">Create</a>
+</div>
+<div>&nbsp;</div>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th></th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td>@item.Created.ToShortDateString()</td>
+        <td>@item.Updated?.ToShortDateString()</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
+}
+</table>

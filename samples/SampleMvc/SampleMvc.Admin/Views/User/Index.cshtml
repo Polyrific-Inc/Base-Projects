@@ -1,0 +1,34 @@
+<!--OpenCatapultModelId:109-->
+@model List<SampleMvc.Admin.Models.UserViewModel>
+@{
+    ViewData["Title"] = "View User";
+}
+<h2>@ViewData["Title"]</h2>
+<div>
+    <a asp-area="Admin" asp-controller="User" asp-action="Create" class="btn btn-default">Create</a>
+</div>
+<div>&nbsp;</div>
+<table class="table">
+    <tr>
+        <th>Is Active?</th>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Email</th>
+        <th>User name</th>
+        <th></th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.IsActive</td>
+        <td>@item.LastName</td>
+        <td>@item.FirstName</td>
+        <td>@item.Email</td>
+        <td>@item.UserName</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
+}
+</table>
