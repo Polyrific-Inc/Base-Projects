@@ -1,0 +1,9 @@
+<h1>Edit User</h1>
+<form [formGroup]="userForm" (submit)="onSubmit()">
+  <div class="form-group">
+    <label for="id">Id</label>
+    <input type="text" class="form-control" formControlName="id" id="id">
+  </div>
+  <app-user-form [userForm]="userForm" [submitted]="submitted"></app-user-form>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

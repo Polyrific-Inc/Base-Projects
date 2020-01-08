@@ -22,7 +22,7 @@ export class ProductComponent implements OnInit {
       if (result) {
         this.productService.deleteProduct(productId).subscribe(() => {
           this.getProducts();
-        })
+        });
       }
     }).catch(() => console.log('dismissed'));
   }
