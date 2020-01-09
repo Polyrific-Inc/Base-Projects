@@ -6,6 +6,7 @@ namespace Core.Services
 {
     public interface IProductService
     {
+        Task<int> AddProduct(Product newProduct);
         Task<IEnumerable<Product>> GetProducts(string name);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,10 +35,12 @@ namespace Api
             if (!_env.IsEnvironment("Test"))
             {
                 services
-                    .AddDbContext(Configuration.GetConnectionString("DefaultConnection"))
+                    .AddAppDbContext(Configuration.GetConnectionString("DefaultConnection"))
                     .AddDataRepositories()
                     .AddAppServices();
             }
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

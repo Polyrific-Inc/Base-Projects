@@ -14,6 +14,11 @@ namespace Core.Services
             _productRepository = productRepository;
         }
 
+        public Task<int> AddProduct(Product newProduct)
+        {
+            return _productRepository.Create(newProduct);
+        }
+
         public async Task<IEnumerable<Product>> GetProducts(string name)
         {
             var spec = new Specification<Product>(e => e.Name.Contains(name));

@@ -6,9 +6,9 @@ namespace Infrastructure
 {
     public static class DbContextSetup
     {
-        public static IServiceCollection AddDbContext(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddAppDbContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<DbContext, ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             });
