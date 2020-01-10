@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-lg-6">
+        <div *ngIf="showBreadcumb" class="page-header-left">
+          <h3>{{title}}</h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs">
+              <a [routerLink]="'/'" *ngIf="breadcrumb?.url == '/admin'">
+                <app-feather-icons [icon]="'home'" *ngIf="breadcrumb?.url == '/admin'"></app-feather-icons>
+              </a>
+              <a [routerLink]="breadcrumb?.url" *ngIf="breadcrumb?.url != '/admin'">
+                {{breadcrumb?.displayName}}
+              </a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

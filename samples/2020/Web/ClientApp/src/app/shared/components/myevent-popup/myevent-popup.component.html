@@ -1,0 +1,82 @@
+
+<div class="events-modal-desktop">
+  <div class="image-column">
+    <img src="assets/images/event-popup.jpg" alt="">
+  </div>
+  <div class="events-container">
+    <div class="pre-header">User profile ></div>
+    <h4>MY EVENTS</h4>
+    <div id="table-container">
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">Event name</th>
+          <th scope="col">Date of event</th>
+          <th scope="col">Registration Status</th>
+        </tr>
+        </thead>
+        <tbody class="custom-scrollbar">
+        <tr *ngFor="let item of events">
+          <td class="event-name-popup"><a href="/event/{{item.canonicalUrl}}" >{{item.name}}</a></td>
+          <td>{{item.eventStartDate | date: 'MM.dd.yyyy'}}</td>
+          <td>
+            <label class="toggle-check">
+              <input type="checkbox" class="toggle-check-input" [checked]="true" (change)="registerChange($event, item.id)" id="event{{item.id}}" />
+              <span class="toggle-check-text"></span>
+            </label>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer" class="text-center">
+      <button type="button" class="btn btn-orange" (click)="saveButtonClick()">SAVE</button> &nbsp;
+      <button type="button" class="btn btn-outline-orange" (click)="activeModal.close('Close click')">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<div class="events-modal-mobile">
+  <div>
+    <img src="assets/images/pop-up-mobile-cover.png" alt="">
+  </div>
+  <div class="events-container">
+    <div class="pre-header">User profile ></div>
+    <h4>MY EVENTS</h4>
+    <div class="events-content">
+      <div class="col-sm-12 event-detail-mobile" *ngFor="let item of events">
+        <br/>
+        <div class="field-title">
+          Event Name:
+        </div>
+        <div class="field-value event-name-popup">
+          <a href="/event/{{item.canonicalUrl}}">{{item.name}}</a>
+        </div>
+        <br/>
+        <div class="field-title">
+            Date of event:
+        </div>
+        <div class="field-value ">
+            {{item.eventStartDate | date: 'MM.dd.yyyy'}}
+        </div>
+        <br/>
+        <div class="field-title">
+            Registration Status:
+        </div>
+        <div class="field-value">
+            <label class="toggle-check">
+              <input type="checkbox" class="toggle-check-input" [checked]="true" (change)="registerChange($event, item.id)" id="event{{item.id}}" />
+              <span class="toggle-check-text"></span>
+            </label>
+        </div>
+        <div class="clear-field"></div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="button-footer">
+        <button type="button" class="btn btn-orange" (click)="saveButtonClick()">SAVE</button> &nbsp;
+        <button type="button" class="btn btn-outline-orange" (click)="activeModal.close('Close click')">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
