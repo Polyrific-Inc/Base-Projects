@@ -1,0 +1,40 @@
+<div class="page-wrapper">
+	<div class="auth-bg">
+		<div class="authentication-box">
+			<div class="text-center"><img src="assets/images/legendary-logo.png" alt="" class="login-logo"></div>
+			<div class="card mt-4">
+				<div class="card-body">
+					<div class="text-center">
+						<h4>LOGIN</h4>
+						<h6>Enter your Username and Password </h6>
+					</div>
+					<form class="theme-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+						<div class="form-group">
+							<label class="col-form-label pt-0">Email</label>
+							<input class="form-control" formControlName="userName" type="text" required="">
+							<div *ngIf="submitted && f.userName.errors && f.userName.errors.required"
+								class="text text-danger mt-1">
+								Email is required
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-form-label">Password</label>
+							<input class="form-control" type="password" formControlName="password" required="">
+							<div *ngIf="submitted && f.password.errors && f.password.errors.required"
+								class="text text-danger mt-1">
+								Password is required
+							</div>
+						</div>
+						<div class="form-group form-row mt-3 mb-0">
+							<button class="btn btn-block btn-lg btn-login"
+								[class.loader--text]="loading"
+								[disabled]="!loginForm.valid || loading"
+								type="submit"><span>Login</span>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,5 @@
+{
+  "apiUrl": "https://localhost:44397",
+  "environmentName": "local-dev",
+  "bypassLogin": true
+}

@@ -1,0 +1,113 @@
+.user-profile{
+    margin: 0 10px 0 10px;
+}
+
+.onhover-dropdown{
+    margin-right: 10px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .notification-bell-text {
+    display:none;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .img-50 {
+    margin-right: 10px;
+  }
+}
+
+@media only screen and (max-width: 765px) {
+  .large-device-only {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 415px) {
+  ul {
+    &.notification-dropdown {
+      &.onhover-show-div {
+        right: -80px;
+        left: -265px;
+        width: auto;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 376px) {
+  ul {
+    &.notification-dropdown {
+      &.onhover-show-div {
+        right: -80px;
+        left:-225px;
+        width: auto;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 321px) {
+  ul {
+    &.notification-dropdown {
+      &.onhover-show-div {
+        right: -86px;
+        left: -180px;
+        width: auto;
+      }
+    }
+  }
+}
+
+.notification-dropdown {
+  max-height: 400px;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.notification-dropdown i, a{
+  color: #ff9f40 !important;
+}
+
+//Scrollbar
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track { // set style to track
+  background : #ff9f40;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb { // sets style to thumb
+  background : #ffffff;
+  border-radius: 10px;
+  box-shadow:  0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.smart-search {
+  .loader-box {
+    display: grid;
+  }
+
+  .search-result-section {
+    li {
+      display: list-item;
+    }
+
+    margin-bottom: 20px
+  }
+
+  text-align: left !important;
+}
+
+.btn-orange {
+  border-radius: 50px !important;
+  border-image: none;
+}
+
+.search-form .form-group:after {
+  left:40px !important;
+}
