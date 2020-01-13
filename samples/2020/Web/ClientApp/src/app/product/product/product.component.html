@@ -1,0 +1,24 @@
+<div>
+  <h1 id="tableLabel" class="pull-left">Product</h1>
+  <button class="btn btn-primary pull-right" routerLink="new">New Product</button>
+</div>
+
+<p *ngIf="!products"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="products">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.name }}</td>
+      <td>
+        <button class="btn btn-default" routerLink="{{product.id}}">Edit</button>
+        <button class="btn btn-default" (click)="onDeleteClicked(product.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

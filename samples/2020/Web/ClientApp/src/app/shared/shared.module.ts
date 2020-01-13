@@ -22,7 +22,6 @@ import { WINDOW_PROVIDERS } from "./services/window.service";
 
 // Directives
 import { ToggleFullscreenDirective } from './directives/fullscreen.directive';
-import { MyeventPopupComponent } from './components/myevent-popup/myevent-popup.component';
 
 @NgModule({
     declarations: [
@@ -37,8 +36,7 @@ import { MyeventPopupComponent } from './components/myevent-popup/myevent-popup.
         FullLayoutComponent,
         FeatherIconsComponent,
         ToggleFullscreenDirective,
-        BreadcrumbComponent,
-        MyeventPopupComponent,
+        BreadcrumbComponent
     ],
     imports: [
         CommonModule,
@@ -60,7 +58,6 @@ import { MyeventPopupComponent } from './components/myevent-popup/myevent-popup.
     ],
     entryComponents: [
         ConfirmationDialogComponent,
-        MyeventPopupComponent,
         GeneralDialogComponent
     ]
 })

@@ -7,7 +7,6 @@ import * as jwt_decode from 'jwt-decode';
 import { AuthorizePolicy } from './authorize-policy';
 import { Role } from './role';
 import { Config, ConfigService } from '../../config/config.service';
-import { UserManager, User as OidcUser } from 'oidc-client';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +16,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   private temporaryUser: User;
   public currentUser: Observable<User>;
-
-  private manager: UserManager;
-  private oidcUser: OidcUser | null;
-
+  
   get isLoggedIn() {
     return this.currentUser.pipe(map((currentUser: User) => {
       return currentUser != null;
@@ -52,23 +48,31 @@ export class AuthService {
       this.config = this.configService.getConfig();
     }
 
-    if (this.config.enableSso) {
-      if (!this.manager) {
-        this.manager = new UserManager(this.config.oidc);
-      }
+    if (!user.userName && !user.password && this.temporaryUser) {
+      user.userName = this.temporaryUser.userName;
+      user.password = this.temporaryUser.password;
+    }
 
-      this.manager.signinRedirect();
-    } else {
-      if (!user.userName && !user.password && this.temporaryUser) {
-        user.userName = this.temporaryUser.userName;
-        user.password = this.temporaryUser.password;
-      }
+    // TODO: Delete this in real app
+    if (this.config.bypassLogin) {    
+      user.id = 1;
+      user.userName = 'DummyUser';
+      user.role = Role.Administrator;
+      user.firstName = "Dummy";
+      user.lastName = "User";
+      user.password = null;
+      user.tokenExpired = 99999999999;
+      this.temporaryUser = null;
 
-      return this.http.post(`${this.config.apiUrl}/Token`, user,
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return of(user);
+    }
+
+    return this.http.post(`${this.config.apiUrl}/Token`, user,
       {
         responseType: 'text'
       }).pipe(map(this.storeToken(user)));
-    }
   }
 
   refreshSession() {
@@ -85,14 +89,6 @@ export class AuthService {
   logout() {
     if (!this.config) {
       this.config = this.configService.getConfig();
-    }
-
-    if (this.config.enableSso) {
-      if (!this.manager) {
-        this.manager = new UserManager(this.config.oidc);
-      }
-
-      this.manager.signoutRedirect();
     }
 
     // remove user from local storage to log user out
@@ -117,37 +113,10 @@ export class AuthService {
       return false;
      }
   }
-
-  getCurrentUserPhotoUrl() {
-    let userName = "unknown";
-    if(this.currentUserValue){
-        userName = this.currentUserValue.userName;
-    }
-
-    return `${this.configService.getConfig().apiUrl}/userprofile/${userName}/photo`
-}
-
-  async completeAuthentication() {
-    if (!this.config) {
-      this.config = this.configService.getConfig();
-    }
-
-    if (!this.manager) {
-      this.manager = new UserManager(this.config.oidc);
-    }
-
-    this.oidcUser = await this.manager.signinRedirectCallback();
-
-    this.storeOidcToken(this.oidcUser.access_token);
-  }
-
+  
   private storeToken(user: User) {
     return (token: string) => {
-        if (token === 'Requires two factor') {
-          // temporarily store user object for next process
-          this.temporaryUser = user;
-          return token;
-        } else if (token) {
+        if (token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           user.token = token;
           const decodedToken = this.getDecodedAccessToken(token);
@@ -182,38 +151,6 @@ export class AuthService {
 
       return user;
     };
-  }
-
-  private storeOidcToken(token: string) {
-    const decodedToken = this.getDecodedAccessToken(token);
-
-    var user = <User>{
-      token: token,
-      tokenExpired: decodedToken.exp
-    }
-
-    if (decodedToken.hasOwnProperty('upn')) {
-      user.userName = decodedToken['upn']
-    }
-
-    if (decodedToken.hasOwnProperty('given_name')) {
-      user.firstName = decodedToken['given_name']
-    } else if (decodedToken.hasOwnProperty('name')) {
-      user.firstName = decodedToken['name']
-    }
-
-    if (decodedToken.hasOwnProperty('family_name')) {
-      user.lastName = decodedToken['family_name']
-    }
-
-    if (decodedToken.hasOwnProperty('roles')) {
-      user.role = Array.from(decodedToken['roles'])[0].toString();
-    }
-
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    this.currentUserSubject.next(user);
-
-    return user;
   }
 
   private getDecodedAccessToken(token: string): any {

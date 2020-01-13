@@ -1,5 +1,5 @@
 import { Injectable, HostListener, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 
 // Menu
@@ -30,56 +30,7 @@ export class NavService implements OnDestroy {
             title: 'Home Page', icon: 'home', type: 'link', path: '/'
         },
         {
-            path: '/directory', title: 'Directory', type: 'link', icon: 'users'
-        },
-        {
-            path: '/news', title: 'News', type: 'link', icon: 'rss'
-        },
-        {
-            path: '/event', title: 'Events', type: 'link', icon: 'calendar'
-        },
-        {
-          path: '/launchpad', title: 'LaunchPad', type: 'link', icon: 'grid', disallowedDevices: ['mobile', 'tablet']
-        },
-        {
-            path: '/gallery', title: 'Photo Gallery', type: 'link', icon: 'image'
-        },
-        {
-            path: '/document', title: 'Documents', type: 'link', icon: 'folder'
-        },
-        {
-            title: 'Admin', icon: 'user-plus', type: 'sub', active: false, children: [
-                {
-                    path: '/admin/banner', title: 'Home Page Banners', type: 'link', icon: 'users'
-                },
-                {
-                    path: '/admin/quicklink', title: 'QuickLinks', type: 'link', icon: 'users'
-                },
-                {
-                    path: '/admin/notification', title: 'Notifications', type: 'link'
-                },
-                {
-                    path: '/admin/notificationtype', title: 'Notification Types', type: 'link'
-                },
-                {
-                    path: '/admin/newsarticle', title: 'News', type: 'link'
-                },
-                {
-                    path: '/admin/event', title: 'Events', type: 'link'
-                },
-                {
-                    path: '/admin/gallery', title: 'Photo Gallery', icon: 'image', type: 'link'
-                },
-                {
-                    path: '/admin/documentcategory', title: 'Documents', type: 'link', icon: 'folder'
-                },
-                {
-                    path: '/admin/documentgroup', title: 'Document Groups', type: 'link', icon: 'folders'
-                },
-                {
-                    path: '/admin/pushnotification', title: 'Push Notification', type: 'link', icon: 'folder'
-                },
-            ]
+            path: '/product', title: 'Product', type: 'link', icon: 'folder'
         }];
 
     MENUITEMSEDITOR: Menu[] = [
@@ -87,44 +38,7 @@ export class NavService implements OnDestroy {
             title: 'Home Page', icon: 'home', type: 'link', path: '/'
         },
         {
-            path: '/directory', title: 'Directory', type: 'link', icon: 'users'
-        },
-        {
-            path: '/news', title: 'News', type: 'link', icon: 'rss'
-        },
-        {
-            path: '/event', title: 'Events', type: 'link', icon: 'calendar'
-        },
-        {
-            path: '/launchpad', title: 'LaunchPad', type: 'link', icon: 'grid', disallowedDevices: ['mobile', 'tablet']
-        },
-        {
-            path: '/gallery', title: 'Photo Gallery', type: 'link', icon: 'image'
-        },
-        {
-            path: '/document', title: 'Documents', type: 'link', icon: 'folder'
-        },
-        {
-            title: 'Editor', icon: 'edit', type: 'sub', active: false, children: [
-                {
-                    path: '/admin/banner', title: 'Home Page Banners', type: 'link', icon: 'users'
-                },
-                {
-                    path: '/admin/newsarticle', title: 'News', type: 'link'
-                },
-                {
-                    path: '/admin/event', title: 'Events', type: 'link'
-                },
-                {
-                    path: '/admin/gallery', title: 'Photo Gallery', icon: 'image', type: 'link'
-                },
-                {
-                    path: '/admin/documentcategory', title: 'Documents', type: 'link', icon: 'folder'
-                },
-                {
-                    path: '/admin/documentgroup', title: 'Document Groups', type: 'link', icon: 'folders'
-                }
-            ]
+          path: '/product', title: 'Product', type: 'link', icon: 'folder'
         }
     ];
 
@@ -133,22 +47,7 @@ export class NavService implements OnDestroy {
             title: 'Home Page', icon: 'home', type: 'link', path: '/'
         },
         {
-            path: '/directory', title: 'Directory', type: 'link', icon: 'users'
-        },
-        {
-            path: '/news', title: 'News', type: 'link', icon: 'rss'
-        },
-        {
-            path: '/event', title: 'Events', type: 'link', icon: 'calendar'
-        },
-        {
-            path: '/launchpad', title: 'LaunchPad', type: 'link', icon: 'grid', disallowedDevices: ['mobile', 'tablet']
-        },
-        {
-            path: '/gallery', title: 'Photo Gallery', type: 'link', icon: 'image'
-        },
-        {
-            path: '/document', title: 'Documents', type: 'link', icon: 'folder'
+          path: '/product', title: 'Product', type: 'link', icon: 'folder'
         }
     ];
 

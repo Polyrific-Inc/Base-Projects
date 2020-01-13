@@ -18,6 +18,7 @@ namespace Api
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+        private readonly string _allowSpecificOriginsPolicy = "_allowSpecificOriginsPolicy";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
@@ -41,6 +42,15 @@ namespace Api
             }
 
             services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_allowSpecificOriginsPolicy, builder => builder
+                    .WithOrigins(Configuration["AllowedOrigin"].Split(","))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+                );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +64,7 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(_allowSpecificOriginsPolicy);
 
             app.UseAuthorization();
 
