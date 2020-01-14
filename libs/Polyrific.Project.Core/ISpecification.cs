@@ -34,5 +34,15 @@ namespace Polyrific.Project.Core
         /// Related entities to be included in the query
         /// </summary>
         List<string> IncludeStrings { get; }
+
+        /// <summary>
+        /// The number of items to skip
+        /// </summary>
+        int? Skip { get; }
+
+        /// <summary>
+        /// The maximum number of items to return
+        /// </summary>
+        int? Take { get; }
     }
 }

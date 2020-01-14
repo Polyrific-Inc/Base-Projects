@@ -22,11 +22,16 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductDto>> GetAll()
+        public async Task<PageResult<ProductDto>> GetAll(int? page, int? size)
         {
-            var entities = await _productService.GetProducts();
+            var (entities, total) = await _productService.GetProducts(page ?? 1, size ?? 20);
 
-            return _mapper.Map<IEnumerable<ProductDto>>(entities);
+            return new PageResult<ProductDto>{
+                Items = _mapper.Map<IEnumerable<ProductDto>>(entities),
+                TotalCount = total,
+                Page = page ?? 1,
+                PageSize = size ?? 20
+            };
         }
 
         [HttpGet("{id}")]

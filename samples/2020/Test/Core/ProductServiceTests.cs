@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Core.Entities;
 using Core.Services;
@@ -32,6 +33,25 @@ namespace Test.Core
         public async void GetProducts_ReturnsItems()
         {
             _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<Product> {
+                    new Product { Id = 1 },
+                    new Product { Id = 2 }
+                });
+            _productRepository.Setup(r => r.CountBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(3);
+
+            var service = new ProductService(_productRepository.Object);
+            var (entities, total) = await service.GetProducts(1, 2);
+
+            Assert.NotEmpty(entities);
+            Assert.Equal(2, entities.Count());
+            Assert.Equal(3, total);
+        }
+
+        [Fact]
+        public async void GetProducts_ByName_ReturnsItems()
+        {
+            _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<Product>{
                     new Product { Name = "Product1" }
                 });
@@ -43,7 +63,7 @@ namespace Test.Core
         }
 
         [Fact]
-        public async void GetProducts_ReturnsEmpty()
+        public async void GetProducts_ByName_ReturnsEmpty()
         {
             _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<Product>());

@@ -44,6 +44,66 @@ namespace Test.Api
         }
 
         [Fact]
+        public async void GetAll_WithPagingValues_ReturnsObjects()
+        {
+            var dummyItems = new List<Product>
+            {
+                new Product{ Id = 1 },
+                new Product{ Id = 2 },
+                new Product{ Id = 3 }
+            };
+            _productService.Setup(s => s.GetProducts(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync((int page, int size) => (
+                    dummyItems.OrderBy(i => i.Id)
+                        .Skip((page - 1) * size)
+                        .Take(size), 
+                    dummyItems.Count
+                ));
+
+            var response = await _client.GetAsync("/product?page=1&size=2");
+            
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            var pageResult = JsonConvert.DeserializeObject<PageResult<ProductDto>>(responseString);
+
+            Assert.NotEmpty(pageResult.Items);
+            Assert.Equal(2, pageResult.Items.Count());
+            Assert.Equal(3, pageResult.TotalCount);
+            Assert.Equal(1, pageResult.Page);
+            Assert.Equal(2, pageResult.PageSize);
+        }
+
+        [Fact]
+        public async void GetAll_WithoutPagingValues_ReturnsObjects()
+        {
+            var dummyItems = new List<Product>();
+            for (int i = 0; i < 21; i++)
+            {
+                dummyItems.Add(new Product { Id = i + 1 });
+            }
+
+            _productService.Setup(s => s.GetProducts(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync((int page, int size) => (
+                    dummyItems.OrderBy(i => i.Id)
+                        .Skip((page - 1) * size)
+                        .Take(size),
+                    dummyItems.Count
+                ));
+
+            var response = await _client.GetAsync("/product");
+
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            var pageResult = JsonConvert.DeserializeObject<PageResult<ProductDto>>(responseString);
+
+            Assert.NotEmpty(pageResult.Items);
+            Assert.Equal(20, pageResult.Items.Count());
+            Assert.Equal(21, pageResult.TotalCount);
+            Assert.Equal(1, pageResult.Page);
+            Assert.Equal(20, pageResult.PageSize);
+        }
+
+        [Fact]
         public async void GetByName_ReturnsObject()
         {
             _productService.Setup(s => s.GetProducts(It.IsAny<string>()))
@@ -89,6 +149,16 @@ namespace Test.Api
             Assert.Equal(1, newId);
         }
 
-        public void Dispose() => _fixture.Output = null;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                _fixture.Output = null;
+        }
     }
 }

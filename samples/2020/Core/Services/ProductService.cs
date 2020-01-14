@@ -44,12 +44,14 @@ namespace Core.Services
             return await _productRepository.GetById(id);
         }
 
-        public async Task<IEnumerable<Product>> GetProducts()
+        public async Task<(IEnumerable<Product> entities, int total)> GetProducts(int page, int size)
         {
-            var spec = new Specification<Product>(e => true);
-            var items = await _productRepository.GetBySpec(spec);
+            var spec = new Specification<Product>(e => true, e => e.Name, false, (page - 1) * size, size);
+            
+            var entities = await _productRepository.GetBySpec(spec);
+            var total = await _productRepository.CountBySpec(spec);
 
-            return items;
+            return (entities, total);
         }
     }
 }
