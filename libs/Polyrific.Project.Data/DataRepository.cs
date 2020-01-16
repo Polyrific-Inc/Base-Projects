@@ -125,10 +125,15 @@ namespace Polyrific.Project.Data
                 secondaryResult = secondaryResult.OrderByDescending(spec.OrderByDescending);
             }
 
-            // return the result of the query using the specification's criteria expression
-            return await secondaryResult
-                .Where(spec.Criteria)
-                .ToListAsync(cancellationToken);
+            // apply criteria and paging values
+            secondaryResult = secondaryResult.Where(spec.Criteria);
+
+            // apply paging values
+            if (spec.Skip.HasValue && spec.Take.HasValue)
+                secondaryResult = secondaryResult.Skip(spec.Skip.Value).Take(spec.Take.Value);
+
+            // return the result of the query
+            return await secondaryResult.ToListAsync(cancellationToken);
         }
 
         /// <summary>

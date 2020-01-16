@@ -56,6 +56,16 @@ namespace Polyrific.Project.Core
         public List<string> IncludeStrings { get; } = new List<string>();
 
         /// <summary>
+        /// The number of items to skip
+        /// </summary>
+        public int? Skip { get; private set; }
+
+        /// <summary>
+        /// The maximum number of items to return
+        /// </summary>
+        public int? Take { get; private set; }
+
+        /// <summary>
         /// Adds include expression to the specification
         /// </summary>
         /// <param name="includeExpression">The include expression to be added</param>

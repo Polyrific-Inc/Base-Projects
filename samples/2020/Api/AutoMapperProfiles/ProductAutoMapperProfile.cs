@@ -10,6 +10,7 @@ namespace Api.AutoMapperProfiles
         {
             CreateMap<Product, ProductDto>();
             CreateMap<NewProductDto, Product>();
+            CreateMap<UpdatedProductDto, Product>();
         }
     }
 }

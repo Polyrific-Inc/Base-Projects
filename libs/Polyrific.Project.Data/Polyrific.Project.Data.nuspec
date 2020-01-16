@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>The base for Polyrific Data project</description>
     <releaseNotes>This is beta release</releaseNotes>
-    <copyright>Copyright (c) Polyrific, Inc 2019. All rights reserved</copyright>
+    <copyright>Copyright (c) Polyrific, Inc 2020. All rights reserved</copyright>
     <tags>polyrific polyrific-project base-project entityframeworkcore</tags>
     <dependencies>
       <dependency id="Microsoft.EntityFrameworkCore" version="2.2.6" />

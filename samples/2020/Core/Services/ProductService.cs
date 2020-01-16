@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
 using Polyrific.Project.Core;
+using Polyrific.Project.Core.Exceptions;
 
 namespace Core.Services
 {
@@ -14,16 +15,26 @@ namespace Core.Services
             _productRepository = productRepository;
         }
 
-        public Task<int> AddProduct(Product newProduct)
+        public async Task<int> SaveProduct(Product product, bool createIfNotExist = true)
         {
-            return _productRepository.Create(newProduct);
-        }
+            if (product.Id > 0)
+            {
+                var entity = await _productRepository.GetById(product.Id);
+                if (entity != null)
+                {
+                    entity.Name = product.Name;
+                    await _productRepository.Update(entity);
 
-        public async Task EditProduct(Product product)
-        {
-            var entity = await _productRepository.GetById(product.Id);
-            entity.Name = product.Name;
-            await _productRepository.Update(entity);
+                    return entity.Id;
+                }
+
+                if (!createIfNotExist)
+                    throw new NotExistEntityException(product.Id);
+            }
+            
+            var newId = await _productRepository.Create(product);
+
+            return newId;
         }
 
         public Task DeleteProduct(int id)
@@ -39,17 +50,19 @@ namespace Core.Services
             return items;
         }
 
-        public async Task<Product> GetProduct(int id)
+        public Task<Product> GetProduct(int id)
         {
-            return await _productRepository.GetById(id);
+            return _productRepository.GetById(id);
         }
 
-        public async Task<IEnumerable<Product>> GetProducts()
+        public async Task<(IEnumerable<Product> entities, int total)> GetProducts(int page, int size)
         {
-            var spec = new Specification<Product>(e => true);
-            var items = await _productRepository.GetBySpec(spec);
+            var spec = new Specification<Product>(e => true, e => e.Name, false, (page - 1) * size, size);
+            
+            var entities = await _productRepository.GetBySpec(spec);
+            var total = await _productRepository.CountBySpec(spec);
 
-            return items;
+            return (entities, total);
         }
     }
 }

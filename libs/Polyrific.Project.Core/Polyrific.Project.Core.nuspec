@@ -12,10 +12,10 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>The base for Polyrific Core projects</description>
     <releaseNotes>This is beta release</releaseNotes>
-    <copyright>Copyright (c) Polyrific, Inc 2019. All rights reserved</copyright>
+    <copyright>Copyright (c) Polyrific, Inc 2020. All rights reserved</copyright>
     <tags>polyrific polyrific-project base-project</tags>
   </metadata>
   <files>
-    <file src="bin\Release\netstandard2.0\*" target="lib\netstandard2.0"></file>
+    <file src="bin\Release\netstandard2.1\*" target="lib\netstandard2.1"></file>
   </files>
 </package>
