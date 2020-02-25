@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Config, ConfigService, OidcConfig } from '../../config/config.service';
+import { Config, ConfigService } from '../../config/config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,7 @@ export class ApiService {
       this.config = {
         apiUrl: 'http://localhost',
         environmentName: 'local-dev',
-        enableSso: false,
-        oidc : <OidcConfig>{}
+        bypassLogin: false
       };
     }
   }
