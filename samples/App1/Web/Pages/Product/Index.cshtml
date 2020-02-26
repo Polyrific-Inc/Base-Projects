@@ -1,0 +1,64 @@
+﻿@page
+@model Web.Product.IndexModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+@if (!string.IsNullOrEmpty(Model.InfoMessage))
+{
+    <div class="alert alert-info" role="alert">@Model.InfoMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
+}
+
+<div class="row mt-3 pr-3">
+    <div class="col text-right">
+        <a asp-page="Create" class="btn btn-primary pull-right">Create</a>
+    </div>
+</div>
+
+<table class="table table-hover mt-3">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items.Items)
+        {
+            <tr>
+                <th scope="row">@item.Name</th>
+                <td class="text-right">
+                    <a asp-page="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i></a> |
+                    <a data-toggle="modal" href="#confirm-delete-@item.Id" title="Delete"><i class="fas fa-trash"></i></a>
+                    <div class="modal fade" id="confirm-delete-@item.Id" data-backdrop="static" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="modal-title">Confirm Delete</div>
+                                </div>
+                                <div class="modal-body text-left">
+                                    @string.Format("Are you sure you want to delete \"{0} ({1})\"?", item.DisplayName, item.Id)
+                                </div>
+                                <div class="modal-footer">
+                                    <form method="post">
+                                        <button asp-page-handler="Delete" asp-route-id="@item.Id" asp-route-name="@item.DisplayName" class="btn btn-danger">Yes</button>
+                                        <button class="btn btn-default" data-dismiss="modal" aria-label="close">No</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
