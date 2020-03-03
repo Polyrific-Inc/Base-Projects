@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Polyrific.Project.Core
 {
-    public abstract class BaseService<T> : IBaseService<T> where T : BaseEntity<T>
+    public abstract class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
         protected readonly IRepository<T> _repository;
 

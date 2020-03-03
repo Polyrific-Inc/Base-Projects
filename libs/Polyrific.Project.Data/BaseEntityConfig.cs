@@ -9,7 +9,7 @@ namespace Polyrific.Project.Data
     /// Entity config base class
     /// </summary>
     /// <typeparam name="TEntity">The entity to configure</typeparam>
-    public abstract class BaseEntityConfig<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity<TEntity>
+    public abstract class BaseEntityConfig<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity
     {
         private readonly string _tableName;
 

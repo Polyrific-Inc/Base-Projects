@@ -2,7 +2,7 @@
 
 namespace Polyrific.Project.Core
 {
-    public interface IBaseService<T> where T : BaseEntity<T>
+    public interface IBaseService<T> where T : BaseEntity
     {
         Task<Result> Delete(int id);
 

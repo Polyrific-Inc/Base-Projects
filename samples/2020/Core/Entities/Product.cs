@@ -2,13 +2,13 @@ using Polyrific.Project.Core;
 
 namespace Core.Entities
 {
-    public class Product : BaseEntity<Product>
+    public class Product : BaseEntity
     {
         public string Name { get; set; }
 
-        public override void UpdateValueFrom(Product source)
+        public override void UpdateValueFrom(BaseEntity source)
         {
-            Name = source.Name;
+            Name = ((Product)source).Name;
         }
     }
 }

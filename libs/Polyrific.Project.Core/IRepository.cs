@@ -8,7 +8,7 @@ namespace Polyrific.Project.Core
     /// Base interface of the repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IRepository<TEntity> where TEntity : BaseEntity<TEntity>
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         /// <summary>
         /// Get entity by id
