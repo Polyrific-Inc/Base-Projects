@@ -8,13 +8,13 @@ namespace Polyrific.Project.Core
     {
         protected readonly IRepository<T> _repository;
 
-        private readonly string _entityName;
+        private readonly string _entityTypeName;
 
         protected BaseService(IRepository<T> repository, ILogger logger)
         {
             Logger = logger;
             _repository = repository;
-            _entityName = typeof(T).Name;
+            _entityTypeName = typeof(T).Name;
         }
 
         protected ILogger Logger { get; }
@@ -27,12 +27,12 @@ namespace Polyrific.Project.Core
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Failed to delete {_entityName} {id}", _entityName, id);
+                Logger.LogError(ex, "Failed to delete {_entityTypeName} {id}", _entityTypeName, id);
 
-                return Result.FailedResult($"Failed to delete {_entityName} {id}. Please check the logs.");
+                return Result.FailedResult($"Failed to delete {_entityTypeName} {id}. Please check the logs.");
             }
 
-            Logger.LogInformation("{_entityName} {webClientId} has been deleted successfully", _entityName, id);
+            Logger.LogInformation("{_entityTypeName} {webClientId} has been deleted successfully", _entityTypeName, id);
 
             return Result.SuccessResult;
         }
@@ -45,7 +45,7 @@ namespace Polyrific.Project.Core
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Failed to get {_entityName} {id}", _entityName, id);
+                Logger.LogError(ex, "Failed to get {_entityTypeName} {id}", _entityTypeName, id);
 
                 return null;
             }
@@ -68,7 +68,7 @@ namespace Polyrific.Project.Core
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Failed to get {pageSize} {_entityName} on page {page}", _entityName, pageSize, page);
+                Logger.LogError(ex, "Failed to get {pageSize} {_entityTypeName} on page {page}", _entityTypeName, pageSize, page);
 
                 return new Paging<T>();
             }
@@ -82,7 +82,7 @@ namespace Polyrific.Project.Core
             if (entity.Id < 1)
             {
                 if (!createIfNotExist)
-                    return Result<T>.FailedResult(entity, $"{_entityName} was not created because the {nameof(createIfNotExist)} is \"false\"");
+                    return Result<T>.FailedResult(entity, $"{_entityTypeName} was not created because the {nameof(createIfNotExist)} is \"false\"");
 
                 createMode = true;
             }
@@ -92,7 +92,7 @@ namespace Polyrific.Project.Core
                 if (item == null)
                 {
                     if (!createIfNotExist)
-                        return Result<T>.FailedResult(entity, $"{_entityName} {entity.Id} doesn't exist");
+                        return Result<T>.FailedResult(entity, $"{_entityTypeName} {entity.Id} doesn't exist");
 
                     createMode = true;
                 }
@@ -106,12 +106,12 @@ namespace Polyrific.Project.Core
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, $"Failed to create {_entityName}");
+                    Logger.LogError(ex, $"Failed to create {_entityTypeName}");
 
-                    return Result<T>.FailedResult(entity, $"Failed to create {_entityName}. Please check the logs.");
+                    return Result<T>.FailedResult(entity, $"Failed to create {_entityTypeName}. Please check the logs.");
                 }
 
-                Logger.LogInformation($"{_entityName} has been created successfully");
+                Logger.LogInformation($"{_entityTypeName} has been created successfully");
             }
             else
             {
@@ -124,10 +124,10 @@ namespace Polyrific.Project.Core
                 {
                     Logger.LogError(ex, "Failed to update entity {Id}", entity.Id);
 
-                    return Result<T>.FailedResult(entity, $"Failed to update {_entityName} {entity.Id}. Please check the logs.");
+                    return Result<T>.FailedResult(entity, $"Failed to update {_entityTypeName} {entity.Id}. Please check the logs.");
                 }
 
-                Logger.LogInformation("{_entityName} {Id} has been updated successfully", _entityName, entity.Id);
+                Logger.LogInformation("{_entityTypeName} {Id} has been updated successfully", _entityTypeName, entity.Id);
             }
 
             var updatedEntity = await Get(entity.Id);
