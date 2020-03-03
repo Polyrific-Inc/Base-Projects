@@ -122,7 +122,7 @@ namespace Polyrific.Project.Core
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "Failed to update entity {Id}", entity.Id);
+                    Logger.LogError(ex, "Failed to update {_entityTypeName} {Id}", _entityTypeName,entity.Id);
 
                     return Result<T>.FailedResult(entity, $"Failed to update {_entityTypeName} {entity.Id}. Please check the logs.");
                 }
