@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Polyrific.Project.Core;
 using Polyrific.Project.Core.Exceptions;
@@ -14,21 +15,31 @@ namespace Test.Core
     public class ProductServiceTests
     {
         private readonly Mock<IRepository<Product>> _productRepository;
+        private readonly Mock<ILogger<ProductService>> _logger;
 
         public ProductServiceTests()
         {
             _productRepository = new Mock<IRepository<Product>>();
+            _logger = new Mock<ILogger<ProductService>>();
         }
 
         [Fact]
         public async void SaveProduct_New_Success()
         {
-            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>())).ReturnsAsync(1);
+            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>())).ReturnsAsync((Product product, CancellationToken cancellationToken) =>
+            {
+                product.Id = 1;
+                return product.Id;
+            });
+            _productRepository.Setup(r => r.GetById(1, It.IsAny<CancellationToken>())).ReturnsAsync(new Product
+            {
+                Id = 1
+            });
 
-            var service = new ProductService(_productRepository.Object);
-            var newId = await service.SaveProduct(new Product());
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.Save(new Product(), true);
 
-            Assert.Equal(1, newId);
+            Assert.Equal(1, result.Item.Id);
         }
 
         [Fact]
@@ -39,11 +50,11 @@ namespace Test.Core
             _productRepository.Setup(r => r.Update(It.IsAny<Product>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
-            var service = new ProductService(_productRepository.Object);
-            var id = await service.SaveProduct(new Product { Id = 1 });
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.Save(new Product { Id = 1 });
 
             _productRepository.Verify(r => r.Update(It.IsAny<Product>(), It.IsAny<CancellationToken>()));
-            Assert.Equal(1, id);
+            Assert.Equal(1, result.Item.Id);
         }
 
         [Fact]
@@ -51,14 +62,19 @@ namespace Test.Core
         {
             _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Product)null);
-            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1);
+            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>())).ReturnsAsync((Product product, CancellationToken cancellationToken) =>
+            {
+                product.Id = 1;
+                _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                    .ReturnsAsync((int id, CancellationToken cancellationToken) => new Product { Id = id });
+                return product.Id;
+            });
 
-            var service = new ProductService(_productRepository.Object);
-            var newId = await service.SaveProduct(new Product { Id = 1 });
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.Save(new Product { Id = 1 }, true);
 
             _productRepository.Verify(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>()));
-            Assert.Equal(1, newId);
+            Assert.Equal(1, result.Item.Id);
         }
 
         [Fact]
@@ -67,9 +83,10 @@ namespace Test.Core
             _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Product)null);
             
-            var service = new ProductService(_productRepository.Object);
-            
-            await Assert.ThrowsAsync<NotExistEntityException>(async () => await service.SaveProduct(new Product { Id = 1 }, false));
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.Save(new Product { Id = 1 }, false);
+
+            Assert.Equal("Product 1 doesn't exist", result.Errors.First());
         }
 
         [Fact]
@@ -83,12 +100,12 @@ namespace Test.Core
             _productRepository.Setup(r => r.CountBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(3);
 
-            var service = new ProductService(_productRepository.Object);
-            var (entities, total) = await service.GetProducts(1, 2);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result= await service.GetPageData(1, 2);
 
-            Assert.NotEmpty(entities);
-            Assert.Equal(2, entities.Count());
-            Assert.Equal(3, total);
+            Assert.NotEmpty(result.Items);
+            Assert.Equal(2, result.Items.Count());
+            Assert.Equal(3, result.TotalCount);
         }
 
         [Fact]
@@ -99,11 +116,11 @@ namespace Test.Core
             _productRepository.Setup(r => r.CountBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0);
 
-            var service = new ProductService(_productRepository.Object);
-            var (entities, total) = await service.GetProducts(1, 20);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.GetPageData(1, 20);
 
-            Assert.Empty(entities);
-            Assert.Equal(0, total);
+            Assert.Empty(result.Items);
+            Assert.Equal(0, result.TotalCount);
         }
 
         [Fact]
@@ -114,7 +131,7 @@ namespace Test.Core
                     new Product { Name = "Product1" }
                 });
 
-            var service = new ProductService(_productRepository.Object);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
             var items = await service.GetProducts("product");
 
             Assert.NotEmpty(items);
@@ -126,7 +143,7 @@ namespace Test.Core
             _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<Product>());
 
-            var service = new ProductService(_productRepository.Object);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
             var items = await service.GetProducts("product");
 
             Assert.Empty(items);
@@ -138,8 +155,8 @@ namespace Test.Core
             _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((int id, CancellationToken cancellationToken) => new Product { Id = id });
 
-            var service = new ProductService(_productRepository.Object);
-            var item = await service.GetProduct(1);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var item = await service.Get(1);
 
             Assert.NotNull(item);
             Assert.Equal(1, item.Id);
@@ -151,8 +168,8 @@ namespace Test.Core
             _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Product)null);
 
-            var service = new ProductService(_productRepository.Object);
-            var item = await service.GetProduct(1);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var item = await service.Get(1);
 
             Assert.Null(item);
         }
@@ -163,8 +180,8 @@ namespace Test.Core
             _productRepository.Setup(r => r.Delete(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
-            var service = new ProductService(_productRepository.Object);
-            await service.DeleteProduct(1);
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            await service.Delete(1);
 
             _productRepository.Verify(r => r.Delete(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         }

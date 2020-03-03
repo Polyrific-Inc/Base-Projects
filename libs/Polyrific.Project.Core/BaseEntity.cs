@@ -26,5 +26,7 @@ namespace Polyrific.Project.Core
         /// A random value that must change whenever an entity is persisted
         /// </summary>
         public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
+
+        public abstract void UpdateValueFrom(BaseEntity source);
     }
 }

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Polyrific.Project.Core;
 using Polyrific.Project.Core.Exceptions;
 using Xunit;
 using Xunit.Abstractions;
@@ -56,12 +57,17 @@ namespace Test.Api
                 new Product{ Id = 2 },
                 new Product{ Id = 3 }
             };
-            _productService.Setup(s => s.GetProducts(It.IsAny<int>(), It.IsAny<int>()))
+            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync((int page, int size) => (
-                    dummyItems.OrderBy(i => i.Id)
+                    new Paging<Product>
+                    {
+                        Items = dummyItems.OrderBy(i => i.Id)
                         .Skip((page - 1) * size)
-                        .Take(size), 
-                    dummyItems.Count
+                        .Take(size),
+                        Page = page,
+                        PageSize = size,
+                        TotalCount = dummyItems.Count
+                    }                    
                 ));
 
             var response = await _client.GetAsync("/product?page=1&size=2");
@@ -86,12 +92,17 @@ namespace Test.Api
                 dummyItems.Add(new Product { Id = i + 1 });
             }
 
-            _productService.Setup(s => s.GetProducts(It.IsAny<int>(), It.IsAny<int>()))
+            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync((int page, int size) => (
-                    dummyItems.OrderBy(i => i.Id)
+                    new Paging<Product>
+                    {
+                        Items = dummyItems.OrderBy(i => i.Id)
                         .Skip((page - 1) * size)
                         .Take(size),
-                    dummyItems.Count
+                        Page = page,
+                        PageSize = size,
+                        TotalCount = dummyItems.Count
+                    }
                 ));
 
             var response = await _client.GetAsync("/product");
@@ -110,8 +121,12 @@ namespace Test.Api
         [Fact]
         public async void GetAll_ReturnsEmpty()
         {
-            _productService.Setup(s => s.GetProducts(It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync((new List<Product>(), 0));
+            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(new Paging<Product>
+                {
+                    Items = new List<Product>(),
+                    TotalCount = 0
+                });
 
             var response = await _client.GetAsync("/product");
 
@@ -125,7 +140,7 @@ namespace Test.Api
         [Fact]
         public async void GetById_ReturnsObject()
         {
-            _productService.Setup(s => s.GetProduct(It.IsAny<int>()))
+            _productService.Setup(s => s.Get(It.IsAny<int>()))
                 .ReturnsAsync((int id) => new Product { Id = id });
 
             var response = await _client.GetAsync("/product/1");
@@ -141,7 +156,7 @@ namespace Test.Api
         [Fact]
         public async void GetById_ReturnsNull()
         {
-            _productService.Setup(s => s.GetProduct(It.IsAny<int>()))
+            _productService.Setup(s => s.Get(It.IsAny<int>()))
                 .ReturnsAsync((int id) => null);
 
             var response = await _client.GetAsync("/product/1");
@@ -187,7 +202,15 @@ namespace Test.Api
         [Fact]
         public async void Post_Success()
         {
-            _productService.Setup(s => s.SaveProduct(It.IsAny<Product>(), It.IsAny<bool>())).ReturnsAsync(1);
+            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>())).ReturnsAsync(new Result<Product>
+            {
+                Success = true,
+                Item = new Product
+                {
+                    Id = 1
+                }
+            });
+
 
             var content = new StringContent(JsonConvert.SerializeObject(new NewProductDto()), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync("/product", content);
@@ -202,7 +225,14 @@ namespace Test.Api
         [Fact]
         public async void Put_Success()
         {
-            _productService.Setup(s => s.SaveProduct(It.IsAny<Product>(), It.IsAny<bool>())).ReturnsAsync(1);
+            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>())).ReturnsAsync(new Result<Product>
+            {
+                Success = true,
+                Item = new Product
+                {
+                    Id = 1
+                }
+            });
 
             var content = new StringContent(JsonConvert.SerializeObject(new UpdatedProductDto { Id = 1 }), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync("/product/1", content);
@@ -211,7 +241,7 @@ namespace Test.Api
             var responseString = await response.Content.ReadAsStringAsync();
             int.TryParse(responseString, out int newId);
 
-            _productService.Verify(s => s.SaveProduct(It.IsAny<Product>(), It.IsAny<bool>()));
+            _productService.Verify(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>()));
         }
 
         [Fact]
@@ -226,7 +256,7 @@ namespace Test.Api
         [Fact]
         public async void Put_NotExists_Failed()
         {
-            _productService.Setup(s => s.SaveProduct(It.IsAny<Product>(), It.IsAny<bool>())).Throws(new NotExistEntityException(1));
+            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>())).Throws(new NotExistEntityException(1));
 
             var content = new StringContent(JsonConvert.SerializeObject(new UpdatedProductDto { Id = 1 }), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync("/product/1", content);
@@ -237,7 +267,10 @@ namespace Test.Api
         [Fact]
         public async void Delete_Success()
         {
-            _productService.Setup(s => s.DeleteProduct(It.IsAny<int>())).Returns(Task.CompletedTask);
+            _productService.Setup(s => s.Delete(It.IsAny<int>())).ReturnsAsync(new Result
+            {
+                Success = true
+            });
 
             var response = await _client.DeleteAsync("/product/1");
 
