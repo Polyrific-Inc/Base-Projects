@@ -8,7 +8,7 @@ namespace Polyrific.Project.Core
     /// The specification base class.
     /// </summary>
     /// <typeparam name="TEntity">The entity class used in the specification</typeparam>
-    public class Specification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
+    public class Specification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity<TEntity>
     {
         /// <summary>
         /// Initiate the search specification

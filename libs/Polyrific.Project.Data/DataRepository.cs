@@ -12,7 +12,7 @@ namespace Polyrific.Project.Data
     /// The base class of the repository
     /// </summary>
     /// <typeparam name="TEntity">Entity to be used in the repository</typeparam>
-    public class DataRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class DataRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity<TEntity>
     {
         /// <summary>
         /// The Db Context of the repository

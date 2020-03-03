@@ -9,7 +9,7 @@ namespace Polyrific.Project.Core
     /// </summary>
     /// <typeparam name="TEntity">The entity class used in the specification</typeparam>
     [Obsolete("Please use \"Specification\" instead which is not an abstract class.", false)]
-    public abstract class BaseSpecification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
+    public abstract class BaseSpecification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity<TEntity>
     {
         protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
         {
