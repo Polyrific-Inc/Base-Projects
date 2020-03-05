@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 
 namespace Polyrific.Project.Data
 {
-    /// <summary>
-    /// The base class of the repository
-    /// </summary>
-    /// <typeparam name="TEntity">Entity to be used in the repository</typeparam>
+    /// <inheritdoc/>
     public class DataRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         /// <summary>
@@ -28,12 +25,7 @@ namespace Polyrific.Project.Data
             Db = db;
         }
 
-        /// <summary>
-        /// Do count operation to the db
-        /// </summary>
-        /// <param name="spec">The specification of the count</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns>The count result</returns>
+        /// <inheritdoc/>
         public virtual async Task<int> CountBySpec(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -51,29 +43,21 @@ namespace Polyrific.Project.Data
             return await secondaryResult.CountAsync(spec.Criteria, cancellationToken);
         }
 
-        /// <summary>
-        /// Create an entry to the db
-        /// </summary>
-        /// <param name="entity">The entity to be created</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns>The new Id of the created entity</returns>
-        public virtual async Task<int> Create(TEntity entity, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public virtual async Task<int> Create(TEntity entity, string userEmail = null, string userDisplayName = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             entity.Created = DateTime.UtcNow;
+            entity.CreatedBy = GetModifier(userEmail, userDisplayName);
+
             Db.Set<TEntity>().Add(entity);
             await Db.SaveChangesAsync(cancellationToken);
 
             return entity.Id;
         }
 
-        /// <summary>
-        /// Delete an entry in the db
-        /// </summary>
-        /// <param name="id">Id of the entity to be deleted</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public virtual async Task Delete(int id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -84,23 +68,13 @@ namespace Polyrific.Project.Data
             await Db.SaveChangesAsync(cancellationToken);
         }
 
-        /// <summary>
-        /// Get an entry in the db using the entity id
-        /// </summary>
-        /// <param name="id">Id of the entity to be retrieved</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns>The entity object</returns>
+        /// <inheritdoc/>
         public virtual Task<TEntity> GetById(int id, CancellationToken cancellationToken = default)
         {
             return Db.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken).AsTask();
         }
 
-        /// <summary>
-        /// Get entries in the db using a specification
-        /// </summary>
-        /// <param name="spec">The specification of the get operation</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns>The list of the entity</returns>
+        /// <inheritdoc/>
         public virtual async Task<IEnumerable<TEntity>> GetBySpec(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -136,12 +110,7 @@ namespace Polyrific.Project.Data
             return await secondaryResult.ToListAsync(cancellationToken);
         }
 
-        /// <summary>
-        /// Get a single entry in the db using a specification
-        /// </summary>
-        /// <param name="spec">The specification</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns>An entity object</returns>
+        /// <inheritdoc/>
         public virtual async Task<TEntity> GetSingleBySpec(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -171,20 +140,28 @@ namespace Polyrific.Project.Data
                 .FirstOrDefaultAsync(spec.Criteria, cancellationToken);
         }
 
-        /// <summary>
-        /// Update an entry in the db
-        /// </summary>
-        /// <param name="entity">The entity to be updated</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
-        /// <returns></returns>
-        public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public virtual async Task Update(TEntity entity, string userEmail = null, string userDisplayName = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             entity.Updated = DateTime.UtcNow;
+            entity.UpdatedBy = GetModifier(userEmail, userDisplayName);
             entity.ConcurrencyStamp = Guid.NewGuid().ToString();
+
             Db.Entry(entity).State = EntityState.Modified;
             await Db.SaveChangesAsync(cancellationToken);
+        }
+
+        private string GetModifier(string userEmail, string userDisplayName)
+        {
+            if (string.IsNullOrEmpty(userEmail) && string.IsNullOrEmpty(userDisplayName))
+                return "";
+
+            if (string.IsNullOrEmpty(userDisplayName))
+                return $"{userEmail} | {userEmail}";
+
+            return $"{userDisplayName} | {userEmail}";
         }
     }
 }
