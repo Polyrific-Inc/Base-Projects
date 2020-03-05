@@ -123,7 +123,7 @@ namespace Polyrific.Project.Test.Core
         [Fact]
         public async void Save_New_CreateSuccess()
         {
-            _repository.Setup(r => r.Create(It.IsAny<DummyTestEntity>(), It.IsAny<CancellationToken>()))
+            _repository.Setup(r => r.Create(It.IsAny<DummyTestEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
 
             _repository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -151,7 +151,7 @@ namespace Polyrific.Project.Test.Core
         [Fact]
         public async void Save_New_ThrowException()
         {
-            _repository.Setup(r => r.Create(It.IsAny<DummyTestEntity>(), It.IsAny<CancellationToken>()))
+            _repository.Setup(r => r.Create(It.IsAny<DummyTestEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new DummyException());
 
             var service = new DummyTestService(_repository.Object, _logger.Object);
@@ -181,7 +181,7 @@ namespace Polyrific.Project.Test.Core
             _repository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new DummyTestEntity { Id = 1 });
 
-            _repository.Setup(r => r.Update(It.IsAny<DummyTestEntity>(), It.IsAny<CancellationToken>()))
+            _repository.Setup(r => r.Update(It.IsAny<DummyTestEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
             var service = new DummyTestService(_repository.Object, _logger.Object);
@@ -199,7 +199,7 @@ namespace Polyrific.Project.Test.Core
             _repository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new DummyTestEntity { Id = 1 });
 
-            _repository.Setup(r => r.Update(It.IsAny<DummyTestEntity>(), It.IsAny<CancellationToken>()))
+            _repository.Setup(r => r.Update(It.IsAny<DummyTestEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new DummyException());
 
             var service = new DummyTestService(_repository.Object, _logger.Object);

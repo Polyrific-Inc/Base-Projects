@@ -34,8 +34,10 @@ namespace Polyrific.Project.Core
         /// Save an entity (either creating new entity or updating an existing one)
         /// </summary>
         /// <param name="entity">The entity to save</param>
-        /// <param name="createIfNotExist">Create new entity if it doesn't exist</param>
+        /// <param name="createIfNotExist">Create new entity if it doesn't exist (default = false)</param>
+        /// <param name="userEmail">Email of current user (to be put in <c>CreatedBy</c> and <c>UpdatedBy</c>)</param>
+        /// <param name="userDisplayName">Display Name of current user (to be put in <c>CreatedBy</c> and <c>UpdatedBy</c>)</param>
         /// <returns>The <see>Result<T></see> of the operation</returns>
-        Task<Result<TEntity>> Save(TEntity entity, bool createIfNotExist = false);
+        Task<Result<TEntity>> Save(TEntity entity, bool createIfNotExist = false, string userEmail = null, string userDisplayName = null);
     }
 }

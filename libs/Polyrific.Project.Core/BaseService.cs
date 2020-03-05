@@ -90,7 +90,7 @@ namespace Polyrific.Project.Core
         }
 
         /// <inheritdoc/>
-        public virtual async Task<Result<TEntity>> Save(TEntity entity, bool createIfNotExist = false)
+        public virtual async Task<Result<TEntity>> Save(TEntity entity, bool createIfNotExist = false, string userEmail = null, string userDisplayName = null)
         {
             bool createMode = false;
 
