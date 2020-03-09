@@ -44,12 +44,19 @@ namespace Polyrific.Project.Data
         }
 
         /// <inheritdoc/>
-        public virtual async Task<int> Create(TEntity entity, string userEmail = null, string userDisplayName = null, CancellationToken cancellationToken = default)
+        public virtual async Task<int> Create(TEntity entity, string userEmail = null, 
+            string userDisplayName = null, bool fillUpdatedInfo = false, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             entity.Created = DateTime.UtcNow;
             entity.CreatedBy = GetModifier(userEmail, userDisplayName);
+
+            if (fillUpdatedInfo)
+            {
+                entity.Updated = entity.Created;
+                entity.UpdatedBy = entity.CreatedBy;
+            }
 
             Db.Set<TEntity>().Add(entity);
             await Db.SaveChangesAsync(cancellationToken);
@@ -97,6 +104,32 @@ namespace Polyrific.Project.Data
             else if (spec.OrderByDescending != null)
             {
                 secondaryResult = secondaryResult.OrderByDescending(spec.OrderByDescending);
+            } 
+            else if (spec.OrderByList.Count > 0)
+            {
+                IOrderedQueryable<TEntity> orderedResult = null;
+                foreach (var orderBy in spec.OrderByList)
+                {
+                    if (orderedResult == null)
+                        orderedResult = secondaryResult.OrderBy(orderBy);
+
+                    orderedResult = orderedResult.ThenBy(orderBy);
+                }
+
+                secondaryResult = orderedResult;
+            }
+            else if (spec.OrderByDescendingList.Count > 0)
+            {
+                IOrderedQueryable<TEntity> orderedResult = null;
+                foreach (var orderByDescending in spec.OrderByDescendingList)
+                {
+                    if (orderedResult == null)
+                        orderedResult = secondaryResult.OrderByDescending(orderByDescending);
+
+                    orderedResult = orderedResult.ThenByDescending(orderByDescending);
+                }
+
+                secondaryResult = orderedResult;
             }
 
             // apply criteria and paging values
@@ -133,6 +166,32 @@ namespace Polyrific.Project.Data
             else if (spec.OrderByDescending != null)
             {
                 secondaryResult = secondaryResult.OrderByDescending(spec.OrderByDescending);
+            }
+            else if (spec.OrderByList.Count > 0)
+            {
+                IOrderedQueryable<TEntity> orderedResult = null;
+                foreach (var orderBy in spec.OrderByList)
+                {
+                    if (orderedResult == null)
+                        orderedResult = secondaryResult.OrderBy(orderBy);
+
+                    orderedResult = orderedResult.ThenBy(orderBy);
+                }
+
+                secondaryResult = orderedResult;
+            }
+            else if (spec.OrderByDescendingList.Count > 0)
+            {
+                IOrderedQueryable<TEntity> orderedResult = null;
+                foreach (var orderByDescending in spec.OrderByDescendingList)
+                {
+                    if (orderedResult == null)
+                        orderedResult = secondaryResult.OrderByDescending(orderByDescending);
+
+                    orderedResult = orderedResult.ThenByDescending(orderByDescending);
+                }
+
+                secondaryResult = orderedResult;
             }
 
             // return the result of the query using the specification's criteria expression

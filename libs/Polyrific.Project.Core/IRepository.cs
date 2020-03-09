@@ -48,9 +48,10 @@ namespace Polyrific.Project.Core
         /// <param name="entity">New entity</param>
         /// <param name="userEmail">Email of current user (to be put in <c>CreatedBy</c> and <c>UpdatedBy</c>)</param>
         /// <param name="userDisplayName">Display Name of current user (to be put in <c>CreatedBy</c> and <c>UpdatedBy</c>)</param>
+        /// <param name="fillUpdatedInfo">Fill the <c>Updated</c> and <c>UpdatedBy</c> fields as well</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled</param>
         /// <returns>Id of the new entity</returns>
-        Task<int> Create(TEntity entity, string userEmail = null, string userDisplayName = null, CancellationToken cancellationToken = default);
+        Task<int> Create(TEntity entity, string userEmail = null, string userDisplayName = null, bool fillUpdatedInfo = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update an entity

@@ -43,11 +43,12 @@ namespace Polyrific.Project.Core
         /// Initiate the search specification
         /// </summary>
         /// <param name="criteria">Search criteria</param>
-        /// <param name="orderBy">The fields that will be used to sort the result</param>
-        /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order fields</param>
+        /// <param name="orderBy">The field that will be used to sort the result</param>
+        /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order field</param>
         /// <param name="skip">The number of items to skip</param>
         /// <param name="take">The maximum number of items to return</param>
-        public Specification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc, int skip, int take)
+        public Specification(Expression<Func<TEntity, bool>> criteria, 
+            Expression<Func<TEntity, object>> orderBy, bool orderDesc, int skip, int take)
         {
             Criteria = criteria;
 
@@ -65,6 +66,32 @@ namespace Polyrific.Project.Core
         }
 
         /// <summary>
+        /// Initiate the search specification
+        /// </summary>
+        /// <param name="criteria">Search criteria</param>
+        /// <param name="orderByList">The list of fields that will be used to sort the result</param>
+        /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order fields</param>
+        /// <param name="skip">The number of items to skip</param>
+        /// <param name="take">The maximum number of items to return</param>
+        public Specification(Expression<Func<TEntity, bool>> criteria, 
+            List<Expression<Func<TEntity, object>>> orderByList, bool orderDesc, int skip, int take)
+        {
+            Criteria = criteria;
+
+            if (orderDesc)
+            {
+                OrderByDescendingList = orderByList;
+            }
+            else
+            {
+                OrderByList = orderByList;
+            }
+
+            Skip = skip;
+            Take = take;
+        }
+
+        /// <summary>
         /// Criteria of the specification
         /// </summary>
         public Expression<Func<TEntity, bool>> Criteria { get; }
@@ -75,9 +102,19 @@ namespace Polyrific.Project.Core
         public Expression<Func<TEntity, object>> OrderBy { get; }
 
         /// <summary>
+        /// List of "order by - ascending" criteria
+        /// </summary>
+        public List<Expression<Func<TEntity, object>>> OrderByList { get; } = new List<Expression<Func<TEntity, object>>>();
+
+        /// <summary>
         /// Order by descending expresion of the specification
         /// </summary>
         public Expression<Func<TEntity, object>> OrderByDescending { get; }
+
+        /// <summary>
+        /// List of "order by - descending" criteria
+        /// </summary>
+        public List<Expression<Func<TEntity, object>>> OrderByDescendingList { get; } = new List<Expression<Func<TEntity, object>>>();
 
         /// <summary>
         /// Includes expression list
