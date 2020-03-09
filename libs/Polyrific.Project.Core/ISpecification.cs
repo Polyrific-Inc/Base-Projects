@@ -21,9 +21,19 @@ namespace Polyrific.Project.Core
         Expression<Func<TEntity, object>> OrderBy { get; }
 
         /// <summary>
+        /// List of "order by - ascending" criteria
+        /// </summary>
+        List<Expression<Func<TEntity, object>>> OrderByList { get; }
+
+        /// <summary>
         /// Order by descending criteria
         /// </summary>
         Expression<Func<TEntity, object>> OrderByDescending { get; }
+
+        /// <summary>
+        /// List of "order by - descending" criteria
+        /// </summary>
+        List<Expression<Func<TEntity, object>>> OrderByDescendingList { get; }
 
         /// <summary>
         /// Related entities to be included in the query

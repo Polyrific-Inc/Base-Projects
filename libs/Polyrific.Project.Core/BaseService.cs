@@ -118,7 +118,7 @@ namespace Polyrific.Project.Core
             {
                 try
                 {
-                    _ = await Repository.Create(entity, userEmail, userDisplayName);
+                    _ = await Repository.Create(entity, userEmail, userDisplayName, true);
                 }
                 catch (Exception ex)
                 {
