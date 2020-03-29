@@ -26,7 +26,7 @@ namespace Test.Core
         [Fact]
         public async void SaveProduct_New_Success()
         {
-            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>())).ReturnsAsync((Product product, CancellationToken cancellationToken) =>
+            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>())).ReturnsAsync((Product product, string userEmail, string userDisplayName, bool fillUpdatedInfo, CancellationToken cancellationToken) =>
             {
                 product.Id = 1;
                 return product.Id;
@@ -47,13 +47,13 @@ namespace Test.Core
         {
             _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((int id, CancellationToken cancellationToken) => new Product { Id = id });
-            _productRepository.Setup(r => r.Update(It.IsAny<Product>(), It.IsAny<CancellationToken>()))
+            _productRepository.Setup(r => r.Update(It.IsAny<Product>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
             var service = new ProductService(_productRepository.Object, _logger.Object);
             var result = await service.Save(new Product { Id = 1 });
 
-            _productRepository.Verify(r => r.Update(It.IsAny<Product>(), It.IsAny<CancellationToken>()));
+            _productRepository.Verify(r => r.Update(It.IsAny<Product>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()));
             Assert.Equal(1, result.Item.Id);
         }
 
@@ -62,7 +62,8 @@ namespace Test.Core
         {
             _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Product)null);
-            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>())).ReturnsAsync((Product product, CancellationToken cancellationToken) =>
+            _productRepository.Setup(r => r.Create(It.IsAny<Product>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>())).ReturnsAsync(
+                (Product product, string userEmail, string userDisplayName, bool fillUpdatedInfo, CancellationToken cancellationToken) =>
             {
                 product.Id = 1;
                 _productRepository.Setup(r => r.GetById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -73,7 +74,7 @@ namespace Test.Core
             var service = new ProductService(_productRepository.Object, _logger.Object);
             var result = await service.Save(new Product { Id = 1 }, true);
 
-            _productRepository.Verify(r => r.Create(It.IsAny<Product>(), It.IsAny<CancellationToken>()));
+            _productRepository.Verify(r => r.Create(It.IsAny<Product>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()));
             Assert.Equal(1, result.Item.Id);
         }
 
@@ -86,7 +87,7 @@ namespace Test.Core
             var service = new ProductService(_productRepository.Object, _logger.Object);
             var result = await service.Save(new Product { Id = 1 }, false);
 
-            Assert.Equal("Product 1 doesn't exist", result.Errors.First());
+            Assert.Equal("Product (Id = 1) doesn't exist", result.Errors.First());
         }
 
         [Fact]
@@ -121,6 +122,48 @@ namespace Test.Core
 
             Assert.Empty(result.Items);
             Assert.Equal(0, result.TotalCount);
+        }
+
+        [Fact]
+        public async void GetProducts_FilterByName_ReturnsItems()
+        {
+            _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((ISpecification<Product> spec, CancellationToken cancellationToken) =>
+                {
+                    var items = new List<Product> {
+                        new Product { Id = 1, Name = "Test1" },
+                        new Product { Id = 2, Name = "Test2" }
+                    }.AsQueryable();
+                    return items.Where(spec.Criteria).ToList();
+                });
+
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.GetPageData(filter: "Name_Test1");
+
+            Assert.NotEmpty(result.Items);
+            Assert.Single(result.Items);
+            Assert.Equal("Test1", result.Items.First().Name);
+        }
+
+        [Fact]
+        public async void GetProducts_OrderByName_ReturnsItems()
+        {
+            _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((ISpecification<Product> spec, CancellationToken cancellationToken) =>
+                {
+                    var items = new List<Product> {
+                        new Product { Id = 1, Name = "zz" },
+                        new Product { Id = 2, Name = "aa" }
+                    }.AsQueryable();
+                    return items.OrderBy(spec.OrderBy).ToList();
+                });
+
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.GetPageData(orderBy: "name");
+
+            Assert.NotEmpty(result.Items);
+            Assert.Equal(2, result.Items.Count());
+            Assert.Equal("aa", result.Items.First().Name);
         }
 
         [Fact]

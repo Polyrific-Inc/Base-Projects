@@ -57,8 +57,8 @@ namespace Test.Api
                 new Product{ Id = 2 },
                 new Product{ Id = 3 }
             };
-            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync((int page, int size) => (
+            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .ReturnsAsync((int page, int size, string orderBy, string filter, bool descending) => (
                     new Paging<Product>
                     {
                         Items = dummyItems.OrderBy(i => i.Id)
@@ -92,8 +92,8 @@ namespace Test.Api
                 dummyItems.Add(new Product { Id = i + 1 });
             }
 
-            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync((int page, int size) => (
+            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .ReturnsAsync((int page, int size, string orderBy, string filter, bool descending) => (
                     new Paging<Product>
                     {
                         Items = dummyItems.OrderBy(i => i.Id)
@@ -121,7 +121,7 @@ namespace Test.Api
         [Fact]
         public async void GetAll_ReturnsEmpty()
         {
-            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>()))
+            _productService.Setup(s => s.GetPageData(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(new Paging<Product>
                 {
                     Items = new List<Product>(),
@@ -202,7 +202,7 @@ namespace Test.Api
         [Fact]
         public async void Post_Success()
         {
-            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>())).ReturnsAsync(new Result<Product>
+            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Result<Product>
             {
                 Success = true,
                 Item = new Product
@@ -225,7 +225,7 @@ namespace Test.Api
         [Fact]
         public async void Put_Success()
         {
-            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>())).ReturnsAsync(new Result<Product>
+            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Result<Product>
             {
                 Success = true,
                 Item = new Product
@@ -241,7 +241,7 @@ namespace Test.Api
             var responseString = await response.Content.ReadAsStringAsync();
             int.TryParse(responseString, out int newId);
 
-            _productService.Verify(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>()));
+            _productService.Verify(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -256,7 +256,7 @@ namespace Test.Api
         [Fact]
         public async void Put_NotExists_Failed()
         {
-            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>())).Throws(new NotExistEntityException(1));
+            _productService.Setup(s => s.Save(It.IsAny<Product>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())).Throws(new NotExistEntityException(1));
 
             var content = new StringContent(JsonConvert.SerializeObject(new UpdatedProductDto { Id = 1 }), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync("/product/1", content);

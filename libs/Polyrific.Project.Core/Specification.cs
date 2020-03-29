@@ -48,7 +48,7 @@ namespace Polyrific.Project.Core
         /// <param name="skip">The number of items to skip</param>
         /// <param name="take">The maximum number of items to return</param>
         public Specification(Expression<Func<TEntity, bool>> criteria, 
-            Expression<Func<TEntity, object>> orderBy, bool orderDesc, int skip, int take)
+            Expression<Func<TEntity, object>> orderBy, bool orderDesc, int? skip, int? take)
         {
             Criteria = criteria;
 
@@ -74,7 +74,7 @@ namespace Polyrific.Project.Core
         /// <param name="skip">The number of items to skip</param>
         /// <param name="take">The maximum number of items to return</param>
         public Specification(Expression<Func<TEntity, bool>> criteria, 
-            List<Expression<Func<TEntity, object>>> orderByList, bool orderDesc, int skip, int take)
+            List<Expression<Func<TEntity, object>>> orderByList, bool orderDesc, int? skip, int? take)
         {
             Criteria = criteria;
 

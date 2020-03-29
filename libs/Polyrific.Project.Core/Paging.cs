@@ -23,7 +23,7 @@ namespace Polyrific.Project.Core
         /// <param name="totalCount">Total number of overall entities</param>
         /// <param name="page">Current page number</param>
         /// <param name="pageSize">The maximum number of entities in a page</param>
-        public Paging(IEnumerable<T> items, int totalCount, int page, int pageSize)
+        public Paging(IEnumerable<T> items, int totalCount, int? page, int? pageSize)
         {
             Items = items;
             TotalCount = totalCount;
@@ -44,11 +44,11 @@ namespace Polyrific.Project.Core
         /// <summary>
         /// Current page number
         /// </summary>
-        public int Page { get; set; }
+        public int? Page { get; set; }
 
         /// <summary>
         /// The maximum number of entities in a page
         /// </summary>
-        public int PageSize { get; set; }
+        public int? PageSize { get; set; }
     }
 }

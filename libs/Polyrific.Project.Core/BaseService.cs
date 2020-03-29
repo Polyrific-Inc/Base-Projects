@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Polyrific.Project.Core
@@ -66,13 +67,31 @@ namespace Polyrific.Project.Core
         }
 
         /// <inheritdoc/>
-        public virtual async Task<Paging<TEntity>> GetPageData(int page, int pageSize)
+        public virtual async Task<Paging<TEntity>> GetPageData(int? page = null,
+            int? pageSize = null,
+            string orderBy = null,
+            string filter = null,
+            bool @descending = false)
         {
             if (page < 1)
                 page = 1;
 
-            int skip = (page - 1) * pageSize;
-            var spec = new Specification<TEntity>(e => true, e => e.Id, false, skip, pageSize);
+            int? skip = (page - 1) * pageSize;
+
+            // Sorting
+            Expression<Func<TEntity, object>> _orderBy = ExpressionBuilder.GetSortExpression<TEntity>(orderBy);
+
+            // Filter
+            Expression<Func<TEntity, bool>> criteria = u => true;
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                var filters = ExpressionBuilder.BuildFilter(filter, Op.Contains);
+
+                criteria = ExpressionBuilder.GetExpression<TEntity>(filters);
+            }
+
+            var spec = new Specification<TEntity>(criteria, _orderBy, descending, skip, pageSize);
 
             try
             {
