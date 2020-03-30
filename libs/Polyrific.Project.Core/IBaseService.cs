@@ -27,8 +27,15 @@ namespace Polyrific.Project.Core
         /// </summary>
         /// <param name="page">Current page number (starts from 1)</param>
         /// <param name="pageSize">The maximum number of entities in a page</param>
+        /// <param name="orderBy">The name of the property for the result to be ordered</param>
+        /// <param name="filter">The name and value of the filters in the format of "{PropertyName1}_{PropertyValue1},{PropertyName2}_{PropertyValue2}"</param>
+        /// <param name="descending">Sort the result in descending order?</param>
         /// <returns>The paging object</returns>
-        Task<Paging<TEntity>> GetPageData(int page, int pageSize);
+        Task<Paging<TEntity>> GetPageData(int? page = null,
+            int? pageSize = null,
+            string orderBy = null,
+            string filter = null,
+            bool @descending = false);
 
         /// <summary>
         /// Save an entity (either creating new entity or updating an existing one)
