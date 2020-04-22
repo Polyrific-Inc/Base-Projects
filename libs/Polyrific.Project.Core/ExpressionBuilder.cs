@@ -60,7 +60,7 @@ namespace Polyrific.Project.Core
             PropertyInfo property = typeof(T).GetProperty(orderBy, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             MemberExpression member = Expression.Property(param, property);
 
-            return Expression.Lambda<Func<T, object>>(member, param);
+            return Expression.Lambda<Func<T, object>>(Expression.Convert(member, typeof(object)), param);
         }
 
         public static IList<Filter> BuildFilter(string filter, Op operation)
