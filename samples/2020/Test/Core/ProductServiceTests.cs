@@ -167,6 +167,48 @@ namespace Test.Core
         }
 
         [Fact]
+        public async void GetProducts_OrderByUpdated_ReturnsItems()
+        {
+            _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((ISpecification<Product> spec, CancellationToken cancellationToken) =>
+                {
+                    var items = new List<Product> {
+                        new Product { Id = 1, Name = "zz", Updated = new System.DateTime(2020, 4, 22) },
+                        new Product { Id = 2, Name = "aa", Updated = new System.DateTime(2020, 4, 21) }
+                    }.AsQueryable();
+                    return items.OrderBy(spec.OrderBy).ToList();
+                });
+
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.GetPageData(orderBy: "updated");
+
+            Assert.NotEmpty(result.Items);
+            Assert.Equal(2, result.Items.Count());
+            Assert.Equal("aa", result.Items.First().Name);
+        }
+
+        [Fact]
+        public async void GetProducts_OrderById_ReturnsItems()
+        {
+            _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((ISpecification<Product> spec, CancellationToken cancellationToken) =>
+                {
+                    var items = new List<Product> {
+                        new Product { Id = 2, Name = "zz" },
+                        new Product { Id = 1, Name = "aa" }
+                    }.AsQueryable();
+                    return items.OrderBy(spec.OrderBy).ToList();
+                });
+
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.GetPageData(orderBy: "id");
+
+            Assert.NotEmpty(result.Items);
+            Assert.Equal(2, result.Items.Count());
+            Assert.Equal("aa", result.Items.First().Name);
+        }
+
+        [Fact]
         public async void GetProducts_ByName_ReturnsItems()
         {
             _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
