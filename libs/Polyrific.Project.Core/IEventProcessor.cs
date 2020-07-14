@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace Polyrific.Project.Core
 {
-    public interface IEventProcessor<TEntity> where TEntity : BaseEntity
+    public interface IEventProcessor
+    {
+    }
+
+    public interface IEventProcessor<TEntity> : IEventProcessor where TEntity : BaseEntity
     {
         Task ProcessSaveEntity(SaveEntityEvent<TEntity> eventData);
         Task ProcessDeleteEntity(DeleteEntityEvent<TEntity> eventData);

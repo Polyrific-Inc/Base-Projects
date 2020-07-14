@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Polyrific.Project.Core
@@ -17,7 +18,9 @@ namespace Polyrific.Project.Core
 
         public async override Task Process()
         {
-            if (EventProcessor is IEventProcessor<TEntity> eventHandler)
+            var eventProcessor = EventProcessors.FirstOrDefault(e => e is IEventProcessor<TEntity>);
+
+            if (eventProcessor is IEventProcessor<TEntity> eventHandler)
             {
                 await eventHandler.ProcessDeleteEntity(this);
             }

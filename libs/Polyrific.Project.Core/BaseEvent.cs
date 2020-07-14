@@ -16,16 +16,21 @@ namespace Polyrific.Project.Core
 
         public abstract Task Process();
 
-        public abstract void SetEventProcessor<TBaseEntity>(IEventProcessor<TBaseEntity> eventProcessor) where TBaseEntity : BaseEntity;
+        public abstract void AddEventProcessor<TBaseEntity>(IEventProcessor<TBaseEntity> eventProcessor) where TBaseEntity : BaseEntity;
     }
 
     public abstract class BaseEvent<TEntity> : BaseEvent where TEntity : BaseEntity
     {
-        public IEventProcessor<TEntity> EventProcessor { get; set; }
-
-        public override void SetEventProcessor<TBaseEntity>(IEventProcessor<TBaseEntity> eventProcessor)
+        public BaseEvent()
         {
-            EventProcessor = eventProcessor as IEventProcessor<TEntity>;
+            EventProcessors = new List<IEventProcessor>();
+        }
+
+        public List<IEventProcessor> EventProcessors { get; set; }
+
+        public override void AddEventProcessor<TBaseEntity>(IEventProcessor<TBaseEntity> eventProcessor)
+        {
+            EventProcessors.Add(eventProcessor as IEventProcessor);
         }
     }
 }
