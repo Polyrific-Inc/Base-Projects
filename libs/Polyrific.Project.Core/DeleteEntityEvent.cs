@@ -18,11 +18,12 @@ namespace Polyrific.Project.Core
 
         public async override Task Process()
         {
-            var eventProcessor = EventProcessors.FirstOrDefault(e => e is IEventProcessor<TEntity>);
-
-            if (eventProcessor is IEventProcessor<TEntity> eventHandler)
+            foreach (var eventProcessor in EventProcessors)
             {
-                await eventHandler.ProcessDeleteEntity(this);
+                if (eventProcessor is IEventProcessor<TEntity> eventHandler)
+                {
+                    await eventHandler.ProcessDeleteEntity(this);
+                }
             }
         }
     }
