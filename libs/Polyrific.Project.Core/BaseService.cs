@@ -22,6 +22,13 @@ namespace Polyrific.Project.Core
             _entityTypeName = typeof(TEntity).Name;
         }
 
+        protected BaseService(IRepository<TEntity> repository, ILogger logger, 
+            IEventStorage eventStorage = null) :
+            this(repository, logger)
+        {
+            EventStorage = eventStorage;
+        }
+
         /// <summary>
         /// The main repository of this service
         /// </summary>
@@ -32,12 +39,20 @@ namespace Polyrific.Project.Core
         /// </summary>
         protected ILogger Logger { get; }
 
+        /// <summary>
+        /// Event storage service to emit event
+        /// </summary>
+        protected IEventStorage EventStorage { get; }
+
         /// <inheritdoc/>
         public virtual async Task<Result> Delete(int id)
         {
             try
             {
                 await Repository.Delete(id);
+
+                if (EventStorage != null)
+                    await EventStorage.EmitEvent(new DeleteEntityEvent<TEntity>(id));
             }
             catch (Exception ex)
             {
@@ -166,6 +181,9 @@ namespace Polyrific.Project.Core
             }
 
             var updatedEntity = await Repository.GetById(entity.Id);
+
+            if (EventStorage != null)
+                await EventStorage.EmitEvent(new SaveEntityEvent<TEntity>(updatedEntity));
 
             return Result<TEntity>.SuccessResult(updatedEntity);
         }
