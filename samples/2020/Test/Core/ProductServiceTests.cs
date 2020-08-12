@@ -143,6 +143,28 @@ namespace Test.Core
             Assert.NotEmpty(result.Items);
             Assert.Single(result.Items);
             Assert.Equal("Test1", result.Items.First().Name);
+            Assert.Equal("Test1", result.Items.First().Name);
+        }
+
+        [Fact]
+        public async void GetProducts_FilterByNameNotEqual_ReturnsItems()
+        {
+            _productRepository.Setup(r => r.GetBySpec(It.IsAny<ISpecification<Product>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((ISpecification<Product> spec, CancellationToken cancellationToken) =>
+                {
+                    var items = new List<Product> {
+                        new Product { Id = 1, Name = "Test1" },
+                        new Product { Id = 2, Name = "Test2" }
+                    }.AsQueryable();
+                    return items.Where(spec.Criteria).ToList();
+                });
+
+            var service = new ProductService(_productRepository.Object, _logger.Object);
+            var result = await service.GetPageDataWithFilterOperation(filter: "Name_Test1", operation: Op.NotEquals);
+
+            Assert.NotEmpty(result.Items);
+            Assert.Single(result.Items);
+            Assert.NotEqual("Test1", result.Items.First().Name);
         }
 
         [Fact]
