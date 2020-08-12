@@ -18,6 +18,7 @@ namespace Polyrific.Project.Core
     public enum Op
     {
         Equals,
+        NotEquals,
         GreaterThan,
         LessThan,
         GreaterThanOrEqual,

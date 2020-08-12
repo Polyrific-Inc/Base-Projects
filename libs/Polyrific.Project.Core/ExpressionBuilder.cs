@@ -83,6 +83,9 @@ namespace Polyrific.Project.Core
                 case Op.Equals:
                     return Expression.Equal(member, constant);
 
+                case Op.NotEquals:
+                    return Expression.NotEqual(member, constant);
+
                 case Op.GreaterThan:
                     return Expression.GreaterThan(member, constant);
 
