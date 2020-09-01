@@ -135,6 +135,9 @@ namespace Polyrific.Project.Data
             // apply criteria and paging values
             secondaryResult = secondaryResult.Where(spec.Criteria);
 
+            if (spec.Selector != null)
+                secondaryResult = secondaryResult.Select(spec.Selector);
+
             // apply paging values
             if (spec.Skip.HasValue && spec.Take.HasValue)
                 secondaryResult = secondaryResult.Skip(spec.Skip.Value).Take(spec.Take.Value);
@@ -193,6 +196,9 @@ namespace Polyrific.Project.Data
 
                 secondaryResult = orderedResult;
             }
+
+            if (spec.Selector != null)
+                secondaryResult = secondaryResult.Select(spec.Selector);
 
             // return the result of the query using the specification's criteria expression
             return await secondaryResult

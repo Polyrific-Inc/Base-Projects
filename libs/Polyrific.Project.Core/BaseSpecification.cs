@@ -11,12 +11,13 @@ namespace Polyrific.Project.Core
     [Obsolete("Please use \"Specification\" instead which is not an abstract class.", false)]
     public abstract class BaseSpecification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
     {
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
+        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, TEntity>> selector = null)
         {
             Criteria = criteria;
+            Selector = selector;
         }
 
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false)
+        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false, Expression<Func<TEntity, TEntity>> selector = null)
         {
             Criteria = criteria;
 
@@ -28,6 +29,8 @@ namespace Polyrific.Project.Core
             {
                 OrderBy = orderBy;
             }
+
+            Selector = selector;
         }
 
         /// <summary>
@@ -74,6 +77,11 @@ namespace Polyrific.Project.Core
         /// The maximum number of items to return
         /// </summary>
         public int? Take { get; private set; }
+
+        /// <summary>
+        /// Selector of the specification
+        /// </summary>
+        public Expression<Func<TEntity, TEntity>> Selector { get; }
 
         /// <summary>
         /// Adds include expression to the specification

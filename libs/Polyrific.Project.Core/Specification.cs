@@ -23,9 +23,21 @@ namespace Polyrific.Project.Core
         /// Initiate the search specification
         /// </summary>
         /// <param name="criteria">Search criteria</param>
+        /// <param name="selector">Query selector</param>
+        public Specification(Expression<Func<TEntity, TEntity>> selector, Expression<Func<TEntity, bool>> criteria)
+        {
+            Selector = selector;
+            Criteria = criteria;
+        }
+
+        /// <summary>
+        /// Initiate the search specification
+        /// </summary>
+        /// <param name="criteria">Search criteria</param>
         /// <param name="orderBy">The fields that will be used to sort the result</param>
         /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order fields</param>
-        public Specification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false)
+        /// <param name="selector">Query selector</param>
+        public Specification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false, Expression<Func<TEntity, TEntity>> selector = null)
         {
             Criteria = criteria;
 
@@ -37,6 +49,8 @@ namespace Polyrific.Project.Core
             {
                 OrderBy = orderBy;
             }
+
+            Selector = selector;
         }
 
         /// <summary>
@@ -47,8 +61,9 @@ namespace Polyrific.Project.Core
         /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order field</param>
         /// <param name="skip">The number of items to skip</param>
         /// <param name="take">The maximum number of items to return</param>
+        /// <param name="selector">Query selector</param>
         public Specification(Expression<Func<TEntity, bool>> criteria, 
-            Expression<Func<TEntity, object>> orderBy, bool orderDesc, int? skip, int? take)
+            Expression<Func<TEntity, object>> orderBy, bool orderDesc, int? skip, int? take, Expression<Func<TEntity, TEntity>> selector = null)
         {
             Criteria = criteria;
 
@@ -63,6 +78,8 @@ namespace Polyrific.Project.Core
 
             Skip = skip;
             Take = take;
+
+            Selector = selector;
         }
 
         /// <summary>
@@ -73,8 +90,9 @@ namespace Polyrific.Project.Core
         /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order fields</param>
         /// <param name="skip">The number of items to skip</param>
         /// <param name="take">The maximum number of items to return</param>
+        /// <param name="selector">Query selector</param>
         public Specification(Expression<Func<TEntity, bool>> criteria, 
-            List<Expression<Func<TEntity, object>>> orderByList, bool orderDesc, int? skip, int? take)
+            List<Expression<Func<TEntity, object>>> orderByList, bool orderDesc, int? skip, int? take, Expression<Func<TEntity, TEntity>> selector = null)
         {
             Criteria = criteria;
 
@@ -89,6 +107,8 @@ namespace Polyrific.Project.Core
 
             Skip = skip;
             Take = take;
+
+            Selector = selector;
         }
 
         /// <summary>
@@ -135,6 +155,11 @@ namespace Polyrific.Project.Core
         /// The maximum number of items to return
         /// </summary>
         public int? Take { get; private set; }
+
+        /// <summary>
+        /// Selector of the specification
+        /// </summary>
+        public Expression<Func<TEntity, TEntity>> Selector { get; }
 
         /// <summary>
         /// Adds include expression to the specification
