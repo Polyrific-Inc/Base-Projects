@@ -50,10 +50,10 @@ namespace Test.Data
         {
             using var dbContext = new ApplicationDbContext(ContextOptions);
             var productRepository = new DataRepository<Product>(dbContext);
-            var products = await productRepository.GetBySpec(new Specification<Product>(e => new Product
+            var products = await productRepository.GetBySpec(new Specification<Product>(e => true, null, selector: e => new Product
             {
                 Id = e.Id
-            }, e => true));
+            }));
 
             Assert.Equal(2, products.Count());
             Assert.True(!products.Any(e => e.Id == 0));
@@ -81,10 +81,10 @@ namespace Test.Data
         {
             using var dbContext = new ApplicationDbContext(ContextOptions);
             var productRepository = new DataRepository<Product>(dbContext);
-            var product = await productRepository.GetSingleBySpec(new Specification<Product>(e => new Product
+            var product = await productRepository.GetSingleBySpec(new Specification<Product>(e => true, null, selector: e => new Product
             {
                 Id = e.Id
-            }, e => true));
+            }));
 
             Assert.NotNull(product);
             Assert.Equal(1, product.Id);

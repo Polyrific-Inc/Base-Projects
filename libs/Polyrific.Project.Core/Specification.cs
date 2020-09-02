@@ -23,17 +23,6 @@ namespace Polyrific.Project.Core
         /// Initiate the search specification
         /// </summary>
         /// <param name="criteria">Search criteria</param>
-        /// <param name="selector">Query selector</param>
-        public Specification(Expression<Func<TEntity, TEntity>> selector, Expression<Func<TEntity, bool>> criteria)
-        {
-            Selector = selector;
-            Criteria = criteria;
-        }
-
-        /// <summary>
-        /// Initiate the search specification
-        /// </summary>
-        /// <param name="criteria">Search criteria</param>
         /// <param name="orderBy">The fields that will be used to sort the result</param>
         /// <param name="orderDesc">Whether to sort the result descendingly based on the defined order fields</param>
         /// <param name="selector">Query selector</param>
