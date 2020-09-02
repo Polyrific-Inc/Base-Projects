@@ -11,10 +11,9 @@ namespace Polyrific.Project.Core
     [Obsolete("Please use \"Specification\" instead which is not an abstract class.", false)]
     public abstract class BaseSpecification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
     {
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, TEntity>> selector = null)
+        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
         {
             Criteria = criteria;
-            Selector = selector;
         }
 
         protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false, Expression<Func<TEntity, TEntity>> selector = null)
