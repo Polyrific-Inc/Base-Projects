@@ -54,5 +54,10 @@ namespace Polyrific.Project.Core
         /// The maximum number of items to return
         /// </summary>
         int? Take { get; }
+
+        /// <summary>
+        /// Query selector
+        /// </summary>
+        Expression<Func<TEntity, TEntity>> Selector { get; }
     }
 }

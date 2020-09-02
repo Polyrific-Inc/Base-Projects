@@ -16,7 +16,7 @@ namespace Polyrific.Project.Core
             Criteria = criteria;
         }
 
-        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false)
+        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, object>> orderBy, bool orderDesc = false, Expression<Func<TEntity, TEntity>> selector = null)
         {
             Criteria = criteria;
 
@@ -28,6 +28,8 @@ namespace Polyrific.Project.Core
             {
                 OrderBy = orderBy;
             }
+
+            Selector = selector;
         }
 
         /// <summary>
@@ -74,6 +76,11 @@ namespace Polyrific.Project.Core
         /// The maximum number of items to return
         /// </summary>
         public int? Take { get; private set; }
+
+        /// <summary>
+        /// Selector of the specification
+        /// </summary>
+        public Expression<Func<TEntity, TEntity>> Selector { get; }
 
         /// <summary>
         /// Adds include expression to the specification
